@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | Seminar Library</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/home.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+</head>
+
+<body>
+    <!-- <div class="startup-container" id="startup">
+        <div class="logo"><img src="assets/hello.gif" width="300px" srcset=""></div>
+        <div class="text">Welcome to Seminar Library, ICE, RU</div>
+        <div class="progress-bar"><span></span></div>
+    </div> -->
+
+    <!-- ========================NavBar Start=========================== -->
+
+    <div class="navbar-container">
+        <div class="logo">
+            <img src="assets/Seminar Library Logo (Without BG).png" srcset="">
+        </div>
+
+        <div class="items">
+            <ul>
+                <li>
+                    <div class="search-container">
+                        <input type="text" class="search-input" placeholder="Search...">
+                        <i class="fa fa-search search-icon"></i>
+                    </div>
+                </li>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about/about.html">About</a></li>
+                <li><a href="/book/books.html">Books</a></li>
+                <li><a href="/donate/donate.html">Donate</a></li>
+                <li>
+                    <button class="cart-icon" id="cart-icon" onclick="window.location.href='/checkout/checkout.html'">
+                        <i class="fas fa-list-check" style="font-size: 20px;"></i>
+                        <span class="cart-count" id="cart-count">0</span>
+                    </button>
+                </li>
+                <li><button class="login-btn" onclick="window.location.href='/authentication/login/login.html' ">Login</button>
+                </li>
+                <!-- <li>
+                    <div class="profile-dropdown">
+                        <div class="profile-icon">
+                            <img src="assets/review1.png" alt="Profile">
+                        </div>
+                        <div class="dropdown-content">
+                            <a href="#">My Profile</a>
+                            <a href="#">Settings</a>
+                            <a href="" class="logout"><button class="mobile-logout-btn"><span><i
+                                            class="fas fa-sign-out-alt"></i></span>&nbsp;Log Out</button></a>
+                        </div>
+                    </div>
+                </li> -->
+            </ul>
+        </div>
+
+        <div class="mobile-menu-btn-container">
+            <div class="search-container">
+                <input type="text" class="mobile-search-input" placeholder="Search Books...">
+                <i class="fa fa-search search-icon" onclick="openSearch()" id="search-icon" style="font-size: 20px; ">
+                </i>
+            </div>
+            <button class="mobile-cart-icon" id="mobile-cart-icon" onclick="window.location.href='/checkout/checkout.html'">
+                <i class="fa fa-list-check" style="font-size: 20px;"></i>
+                <span class="mobile-cart-count" id="mobile-cart-count">0</span>
+            </button>
+            <button class="mobile-menu-btn" onclick="openNav()">
+                <i class="fa fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="overlay" id="overlay"></div>
+        <div id="sidebar" class="sidebar">
+            <button class="close-btn" onclick="closeNav()">&times;</button>
+            <div class="sidebar-content">
+                <div class="user-profile">
+                    <div class="image"><img src="assets/review1.png" alt="" srcset=""></div>
+                    <div class="name-and-view-profile">
+                        <div class="name">Md Mehedi Hasan</div>
+                        <div class="view-profile"><a href="#">View Profile ></a></div>
+                    </div>
+                </div>
+                <a href="/">Home</a>
+                <a href="/about/about.html">About</a>
+                <a href="/book/books.html">Books</a>
+                <a href="/donate/donate.html">Donate</a>
+                <button class="mobile-login-btn" onclick="window.location.href='/authentication/login/login.html'"><span><i
+                            class="fas fa-sign-in-alt"></i></span>&nbsp;Login</button>
+                <button class="mobile-logout-btn"><span><i class="fas fa-sign-out-alt"></i></span>&nbsp;Log Out</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- =============== Cart Start ================ -->
+    <div class="cartOverlay" id="cartOverlay"></div>
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="header">
+            <img src="assets/Your Cart.png" width="50px" alt="" srcset="">
+            <div class="close-cart" id="close-cart"><i class="fas fa-times"></i></div>
+        </div>
+        <div class="cart-content">
+            <div class="empty-cart">
+                <h2>Your Checklist is Empty</h2>
+                <img src="assets/empty-cart.png" alt="" srcset="">
+            </div>
+            <div class="item-container" id="item-container">
+                <div class="image-and-details">
+                    <div class="image"></div>
+                    <div class="details">
+                        <h4 class="book-title"></h4>
+                        <p class="book-author"></p>
+                    </div>
+                </div>
+                <div class="remove">Remove</div>
+            </div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total Books:</span>
+                <p id="cart-total">0</p>
+            </div>
+            <button class="proceed-btn" onclick="window.location.href='/checkout/checkout.html'">Proceed to Checkout</button>
+        </div>
+    </div>
+    <!-- ===============Navbar End====================== -->
+
+    <div class="main-container">
+        <!-- ======================== Slider Start ========================== -->
+        <div class="hero">
+            <div class="w3-content w3-display-container slider-gradient" style="max-width:2000px">
+                <div class="slider-overlay">
+                    <h1 data-aos="fade-down" data-aos-delay="300" data-aos-duration="1000">Welcome to Seminar Library,
+                        ICE, RU
+                    </h1>
+                    <p data-aos="fade-down" data-aos-delay="300" data-aos-duration="1000">Explore a world of knowledge
+                        and
+                        discovery through our vast book collection.</p>
+                    <a href="/book/books.html"><button data-aos="flip-left" data-aos-delay="300"
+                            data-aos-duration="1000">Browse Books</button></a>
+                </div>
+
+                <img class="mySlides" src="assets/hero/1.png" style="width:100%">
+                <img class="mySlides" src="assets/hero/2.png" style="width:100%">
+                <img class="mySlides" src="assets/hero/3.png" style="width:100%">
+                <img class="mySlides" src="assets/hero/4.png" style="width:100%">
+                <img class="mySlides" src="assets/hero/5.png" style="width:100%">
+
+                <div class="w3-center w3-container w3-section w3-large w3-text-white w3-display-bottommiddle"
+                    style="width:100%">
+                    <div class="w3-left w3-hover-text-khaki" onclick="plusDivs(-1)">&#10094;</div>
+                    <div class="w3-right w3-hover-text-khaki" onclick="plusDivs(1)">&#10095;</div>
+                    <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(1)"></span>
+                    <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(2)"></span>
+                    <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(3)"></span>
+                    <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(4)"></span>
+                    <span class="w3-badge demo w3-border w3-transparent w3-hover-white" onclick="currentDiv(5)"></span>
+                </div>
+            </div>
+        </div>
+        <!-- =============== Slider End =================== -->
+
+
+        <!-- =============== Service Start ================== -->
+        <div class="service">
+            <h1 data-aos="fade-down" data-aos-delay="400" data-aos-duration="1000">Our Library Services</h1>
+            <div class="service-container">
+                <div class="service-cards" data-aos="flip-left" data-aos-delay="100" data-aos-duration="1000"
+                    data-aos-offset="150">
+                    <div class="icon"><i class="fas fa-book-open"></i></div>
+                    <h2>Easy Borrowing</h2>
+                    <p>Borrow books with just a few clicks. Our streamline system makes it easy to check out and return
+                        books on time.
+                    </p>
+                </div>
+
+                <div class="service-cards" data-aos="flip-left" data-aos-delay="100" data-aos-duration="1000"
+                    data-aos-offset="150">
+                    <div class="icon"><i class="far fa-pen-to-square"></i></div>
+                    <h2>Personalized Recommendation</h2>
+                    <p>Get book recommendation based on your book borrowing history and interest to discover new
+                        knowledge.
+                    </p>
+                </div>
+
+                <div class="service-cards" data-aos="flip-left" data-aos-delay="100" data-aos-duration="1000"
+                    data-aos-offset="150">
+                    <div class="icon"><i class="far fa-envelope"></i></div>
+                    <h2>Support Our Collection</h2>
+                    <p>Donate books or fund to expand our collection and facilities to improve library services for
+                        everyone.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- ==================== Service End ==================== -->
+
+
+        <!-- =====================Featured Books Start================= -->
+        <div class="featured-books-container">
+            <div class="new-featured-books">
+                <h2 class="section-title" data-aos="fade-right">📚 Featured Books</h2>
+                <a href="/book/books.html">
+                    <h5 class="view-all-books" data-aos="fade-right">View All Books <i class="fa fa-arrow-right"></i>
+                    </h5>
+                </a>
+            </div>
+            <div class="book-grid" id="bookGrid" data-aos="fade-up" data-aos-delay="500" data-aos-duration="800"
+                data-aos-offset="150">
+                <div class="book-card">
+                    <img src="assets/books/book1.jpeg" alt="Book 1" />
+                    <h3>Digital Signal Processing</h3>
+                    <p>By John G. Proakis</p>
+                    <p>Copies Available: 3</p>
+                    <div class="btns">
+                        <button>Download</button>
+                        <button onclick="addToCart(this)">Borrow</button>
+                    </div>
+                </div>
+
+                <div class="book-card" data-aos="fade-up" data-aos-delay="500" data-aos-duration="800"
+                    data-aos-offset="150">
+                    <img src="assets/books/book2.jpeg" alt="Book 2" />
+                    <h3>Artificial Intelligence</h3>
+                    <p>By Charu C. Aggarwal</p>
+                    <p>Copies Available: 3</p>
+                    <div class="btns">
+                        <button>Download</button>
+                        <button onclick="addToCart(this)">Borrow</button>
+                    </div>
+                </div>
+
+                <div class="book-card" data-aos="fade-up" data-aos-delay="500" data-aos-duration="800"
+                    data-aos-offset="150">
+                    <img src="assets/books/book3.jpeg" alt="Book 3" />
+                    <h3>Wireless Communication</h3>
+                    <p>By Theodore S. Rappaport</p>
+                    <p>Copies Available: 3</p>
+                    <div class="btns">
+                        <button>Download</button>
+                        <button onclick="addToCart(this)">Borrow</button>
+                    </div>
+                </div>
+
+                <div class="book-card" data-aos="fade-up" data-aos-delay="500" data-aos-duration="800"
+                    data-aos-offset="150">
+                    <img src="assets/books/book4.jpeg" alt="Book 4" />
+                    <h3>Principles of Electronics</h3>
+                    <p>By V.K Mehta</p>
+                    <p>Copies Available: 3</p>
+                    <div class="btns">
+                        <button>Download</button>
+                        <button onclick="addToCart(this)">Borrow</button>
+                    </div>
+                </div>
+
+                <div class="book-card" data-aos="fade-up" data-aos-delay="500" data-aos-duration="800"
+                    data-aos-offset="150">
+                    <img src="assets/books/book5.jpeg" alt="Book 5" />
+                    <h3>Optical Fiber Communication</h3>
+                    <p>By J.M Senior</p>
+                    <p>Copies Available: 3</p>
+                    <div class="btns">
+                        <button>Download</button>
+                        <button onclick="addToCart(this)">Borrow</button>
+                    </div>
+                </div>
+
+                <div class="book-card" data-aos="fade-up" data-aos-delay="500" data-aos-duration="800"
+                    data-aos-offset="150">
+                    <img src="assets/books/book6.jpeg" alt="Book 6" />
+                    <h3>Digital Image Processing</h3>
+                    <p>By Rafael C. Gonjalez</p>
+                    <p>Copies Available: 3</p>
+                    <div class="btns">
+                        <button>Download</button>
+                        <button onclick="addToCart(this)">Borrow</button>
+                    </div>
+                </div>
+            </div>
+            <a href="/book/books.html"><button class="show-more" data-aos="fade-up">Show
+                    More</button></a>
+        </div>
+        <!-- =============Featured Books End================= -->
+
+        <!-- ============Stat Section Start============== -->
+        <section class="stats-section" id="stats">
+            <h2 data-aos="fade-right" data-aos-delay="400">📊 Library Stats</h2>
+            <hr data-aos="fade-right" data-aos-delay="400">
+            <div class="stats-container">
+                <div class="stat" data-aos="fade-up" data-aos-delay="200" data-aos-duration="4000">
+                    <div class="icon">📚</div>
+                    <div class="number" data-target="3000">0</div>
+                    <div class="label">Books</div>
+                </div>
+                <div class="stat" data-aos="fade-up" data-aos-delay="200" data-aos-duration="4000">
+                    <div class="icon">👥</div>
+                    <div class="number" data-target="500">0</div>
+                    <div class="label">Active Users</div>
+                </div>
+                <div class="stat" data-aos="fade-up" data-aos-delay="200" data-aos-duration="4000">
+                    <div class="icon">🏆</div>
+                    <div class="number" data-target="100">0</div>
+                    <div class="label">Research Papers</div>
+                </div>
+            </div>
+        </section>
+        <!-- ===============Stat Section End============= -->
+
+        <!-- ===============Notice Board Start================= -->
+        <!-- <section class="notice-board" data-aos="fade-right">
+            <h2 class="notice-title">📢 Notice Board</h2>
+            <div class="notice-list">
+
+                <div class="notice-item" onclick="toggleNotice(this)">
+                    <div class="notice-header">
+                        <span class="notice-date">May 17, 2025</span>
+                        <span class="notice-text">New books have been added to the seminar section.</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="notice-body">
+                        We’ve added 50+ new titles related to Data Science, AI, and Control Systems. Visit the library
+                        or check the “New Arrivals” section to explore! Lorem ipsum dolor sit, amet consectetur
+                        adipisicing elit. Corrupti ipsum ex voluptatum non vero. Nulla vero dignissimos porro possimus
+                        laudantium commodi recusandae in.
+                    </div>
+                </div>
+
+                <div class="notice-item" onclick="toggleNotice(this)">
+                    <div class="notice-header">
+                        <span class="notice-date">May 20, 2025</span>
+                        <span class="notice-text">Library will be closed on May 21 for maintenance.</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="notice-body">
+                        Due to scheduled electrical maintenance, the library will remain closed on May 21. We apologize
+                        for the inconvenience. Lorem ipsum dolor sit amet consectetur, adipisicing elit. At minima nobis
+                        dolores rem magni aliquam, ducimus quo quibusdam amet facilis, aliquid nihil perspiciatis?
+                    </div>
+                </div>
+
+
+                <div class="hidden-notices" style="display: none;">
+                    <div class="notice-item" onclick="toggleNotice(this)">
+                        <div class="notice-header">
+                            <span class="notice-date">May 5, 2025</span>
+                            <span class="notice-text">Extended hours for finals week.</span>
+                            <span class="arrow">▼</span>
+                        </div>
+                        <div class="notice-body">
+                            The library will open from 7 AM to midnight during finals week. Lorem ipsum dolor sit, amet
+                            consectetur adipisicing elit. Sed, quae? Perferendis, at fugiat? Fugiat culpa eaque rerum?
+                            Odio earum impedit eligendi nisi minima?
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <button class="notice-show-more" onclick="showMoreNotices()">Show
+                More</button>
+        </section> -->
+        <!-- =============Notice Board End============== -->
+
+        <!-- =============Testimonial Start=============== -->
+        <section class="section" data-aos="fade-up">
+            <h2>💬 Student Testimonials</h2>
+            <div class="carousel-container" id="carouselContainer">
+                <div class="carousel" id="carousel">
+                    <div class="testimonial">
+                        <img src="assets/review3.png" class="avatar" alt="Ayesha">
+                        <div class="stars">⭐⭐⭐⭐⭐</div>
+                        <p>"The library environment was perfect for my finals prep. Clean, quiet, and resource-rich!"
+                        </p>
+                        <h4>Miss X Akter – ICE-22</h4>
+                    </div>
+                    <div class="testimonial">
+                        <img src="assets/review2.png" class="avatar" alt="Hasan">
+                        <div class="stars">⭐⭐⭐⭐⭐</div>
+                        <p>"Amazing research access and support! Helped me finish my project ahead of schedule."</p>
+                        <h4>Md. Y Mia – ICE-20</h4>
+                    </div>
+                    <div class="testimonial">
+                        <img src="assets/review1.png" class="avatar" alt="Farzana">
+                        <div class="stars">⭐⭐⭐⭐⭐</div>
+                        <p>"Digital library tools are a game changer. So easy to search and cite!"</p>
+                        <h4>Md. Z Hasan – ICE-21</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dots" id="dots">
+                <div class="dot active" onclick="goToSlide(0)"></div>
+                <div class="dot" onclick="goToSlide(1)"></div>
+                <div class="dot" onclick="goToSlide(2)"></div>
+            </div>
+        </section>
+        <!-- ============= Testimonial End ================== -->
+
+
+        <!-- ========Footer Start ================= -->
+        <footer class="footer">
+            <div class="footer-container">
+
+                <!-- About -->
+                <div class="footer-section">
+                    <h2>About Us</h2>
+                    <p>The Seminar Library of ICE, RU provides access to academic resources that support research and
+                        learning for students and faculty.</p>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="footer-section">
+                    <h2>Quick Links</h2>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="/book/books.html">Browse Books</a></li>
+                        <li><a href="/authentication/login/login.html">Login</a></li>
+                        <li><a href="/book/books.html">Request a Book</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact -->
+                <div class="footer-section">
+                    <h2>Contact Info</h2>
+                    <ul>
+                        <li>ICE Dept, University of Rajshahi</li>
+                        <li>Email: <a href="mailto:ice.library@ru.ac.bd">ice.library@ru.ac.bd</a></li>
+                        <li>Phone: 017XXXXXXXX</li>
+                        <li>M.A Wazed Mia Academic Building, University of Rajshahi</li>
+                    </ul>
+                </div>
+
+                <!-- External Links -->
+                <div class="footer-section">
+                    <h2>Connect</h2>
+                    <ul>
+                        <li><a href="https://www.ru.ac.bd/ice/" target="_blank">ICE Dept Website</a></li>
+                        <li><a href="https://www.ru.ac.bd/" target="_blank">RU Official Site</a></li>
+                        <li><a href="https://web.facebook.com/groups/408338792613622" target="_blank">Facebook Page</a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2025 ICE Seminar Library, RU. Designed by Mehedi.</p>
+            </div>
+        </footer>
+        <!-- =========Footer End============== -->
+    </div>
+
+    <script src="js/index.js"></script>
+    <!-- AOS JS -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            once: false,
+            offset: 120,
+            easing: 'ease-in-out'
+        });
+    </script>
+</body>
+
+</html>

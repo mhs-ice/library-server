@@ -1,0 +1,76 @@
+/* body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: rgb(253, 253, 253);
+    color: rgb(34, 34, 34);
+} */
+
+.about-container {
+    max-width: 90.1vw;
+    margin: auto;
+    padding: 100px 20px;
+}
+
+h1,
+h2 {
+    color: rgb(0, 51, 102);
+}
+
+h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 1.05rem;
+    line-height: 1.7;
+}
+
+.section {
+    padding: 60px 0;
+}
+
+.section:nth-child(even) {
+    background-color: rgb(240, 248, 255);
+    /* #f0f8ff */
+}
+
+.section h2 {
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.section .col-md-6 img {
+    margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+    .section .col-md-6 img {
+        margin-bottom: 30px;
+    }
+}
+
+
+.img-fluid {
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-inner img {
+    height: 400px;
+    object-fit: cover;
+}
+
+.carousel-caption {
+    background-color: rgba(0, 51, 102, 0.7);
+    /* rgba version already used */
+    color: rgb(255, 255, 255);
+    /* white */
+    padding: 10px;
+    border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+    .carousel-inner img {
+        height: 250px;
+    }
+}

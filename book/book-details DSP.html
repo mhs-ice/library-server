@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Signal Processing - Book Details</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .book-details {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .book-header {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 40px;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .book-cover {
+            position: relative;
+        }
+
+        .book-cover img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .book-info h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .author {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .stars {
+            color: #ffd700;
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .rating-text {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .book-meta {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .meta-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .meta-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .meta-value {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .book-content {
+            padding: 40px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+        }
+
+        .main-content h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            color: #555;
+        }
+
+        .topics-covered {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .topics-covered h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .topics-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .topic-item {
+            padding: 8px 12px;
+            background: white;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            border-left: 3px solid #667eea;
+        }
+
+        .sidebar h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .availability {
+            background: #e8f5e8;
+            border: 1px solid #28a745;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .availability-status {
+            display: flex;
+            align-items: center;
+            color: #28a745;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .availability-status::before {
+            content: "✓";
+            margin-right: 8px;
+            font-weight: bold;
+        }
+
+        .book-specs {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .spec-item:last-child {
+            border-bottom: none;
+        }
+
+        .reviews-section {
+            grid-column: 1 / -1;
+            margin-top: 40px;
+        }
+
+        .review-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .reviewer-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .review-date {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .book-header {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .topics-list {
+                grid-template-columns: 1fr;
+            }
+
+            .book-meta {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="book-details">
+            <div class="book-header">
+                <div class="book-cover">
+                    <img src="assets/books/book1.jpeg" alt="Digital Signal Processing by John G. Proakis" />
+                </div>
+                <div class="book-info">
+                    <h1>Digital Signal Processing</h1>
+                    <p class="author">By John G. Proakis & Dimitris K. Manolakis</p>
+                    
+                    <div class="rating">
+                        <div class="stars">★★★★★</div>
+                        <span class="rating-text">4.5/5 (124 reviews)</span>
+                    </div>
+
+                    <div class="book-meta">
+                        <div class="meta-item">
+                            <div class="meta-label">Edition</div>
+                            <div class="meta-value">4th Edition</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Pages</div>
+                            <div class="meta-value">1004 pages</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Publisher</div>
+                            <div class="meta-value">Pearson</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Category</div>
+                            <div class="meta-value">Engineering</div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" onclick="borrowBook()">Borrow Book</button>
+                        <button class="btn btn-secondary" onclick="addToWishlist()">Add to Wishlist</button>
+                        <button class="btn btn-secondary" onclick="downloadSample()">Preview Sample</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="book-content">
+                <div class="content-grid">
+                    <div class="main-content">
+                        <h2>About This Book</h2>
+                        <div class="description">
+                            <p>Digital Signal Processing provides a comprehensive introduction to the theory and practice of digital signal processing. This fourth edition has been extensively updated and revised to reflect the latest developments in the field, making it an essential resource for students and professionals in electrical engineering, computer science, and related disciplines.</p>
+                            
+                            <p>The book covers both the mathematical foundations and practical applications of DSP, with a balanced approach that includes theoretical concepts, algorithmic implementations, and real-world examples. The authors present complex topics in an accessible manner, making this text suitable for both undergraduate and graduate courses.</p>
+
+                            <p>Key features include extensive coverage of digital filter design, the discrete Fourier transform, spectral analysis, and modern applications in communications, biomedical engineering, and multimedia processing.</p>
+                        </div>
+
+                        <div class="topics-covered">
+                            <h3>Key Topics Covered</h3>
+                            <div class="topics-list">
+                                <div class="topic-item">Discrete-Time Signals</div>
+                                <div class="topic-item">Z-Transform</div>
+                                <div class="topic-item">Fourier Transform</div>
+                                <div class="topic-item">Digital Filter Design</div>
+                                <div class="topic-item">FFT Algorithms</div>
+                                <div class="topic-item">Spectral Analysis</div>
+                                <div class="topic-item">Adaptive Filtering</div>
+                                <div class="topic-item">Multirate Systems</div>
+                                <div class="topic-item">Statistical Signal Processing</div>
+                                <div class="topic-item">Applications in Communications</div>
+                            </div>
+                        </div>
+
+                        <div class="reviews-section">
+                            <h2>Student Reviews</h2>
+                            
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <span class="reviewer-name">Alex Chen</span>
+                                    <span class="review-date">March 2024</span>
+                                </div>
+                                <div class="stars">★★★★★</div>
+                                <p>"Excellent textbook for DSP course. The examples are clear and the mathematical explanations are thorough. Highly recommended for engineering students."</p>
+                            </div>
+
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <span class="reviewer-name">Sarah Johnson</span>
+                                    <span class="review-date">February 2024</span>
+                                </div>
+                                <div class="stars">★★★★☆</div>
+                                <p>"Comprehensive coverage of DSP topics. Some sections can be challenging, but the progression is logical. Great reference book to keep after graduation."</p>
+                            </div>
+
+                            <div class="review-item">
+                                <div class="review-header">
+                                    <span class="reviewer-name">Michael Rodriguez</span>
+                                    <span class="review-date">January 2024</span>
+                                </div>
+                                <div class="stars">★★★★★</div>
+                                <p>"The best DSP textbook I've used. Clear explanations, good examples, and excellent problem sets. Essential for anyone serious about signal processing."</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar">
+                        <h3>Availability</h3>
+                        <div class="availability">
+                            <div class="availability-status">Available for Borrowing</div>
+                            <p>3 copies available</p>
+                            <p>Return within 14 days</p>
+                        </div>
+
+                        <h3>Book Specifications</h3>
+                        <div class="book-specs">
+                            <div class="spec-item">
+                                <span>ISBN:</span>
+                                <span>978-0131873742</span>
+                            </div>
+                            <div class="spec-item">
+                                <span>Language:</span>
+                                <span>English</span>
+                            </div>
+                            <div class="spec-item">
+                                <span>Format:</span>
+                                <span>Hardcover</span>
+                            </div>
+                            <div class="spec-item">
+                                <span>Publication Year:</span>
+                                <span>2006</span>
+                            </div>
+                            <div class="spec-item">
+                                <span>Subjects:</span>
+                                <span>Engineering, Mathematics</span>
+                            </div>
+                            <div class="spec-item">
+                                <span>Level:</span>
+                                <span>Undergraduate/Graduate</span>
+                            </div>
+                        </div>
+
+                        <h3>Related Books</h3>
+                        <div class="related-books">
+                            <div class="related-item">
+                                <strong>Discrete-Time Signal Processing</strong><br>
+                                <small>by Alan V. Oppenheim</small>
+                            </div>
+                            <div class="related-item" style="margin-top: 15px;">
+                                <strong>Understanding Digital Signal Processing</strong><br>
+                                <small>by Richard G. Lyons</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function borrowBook() {
+            alert('Redirecting to borrowing system...');
+            // Add actual borrowing logic here
+        }
+
+        function addToWishlist() {
+            alert('Book added to your wishlist!');
+            // Add wishlist logic here
+        }
+
+        function downloadSample() {
+            alert('Downloading sample pages...');
+            // Add sample download logic here
+        }
+
+        // Add smooth scrolling for better UX
+        document.addEventListener('DOMContentLoaded', function() {
+            const bookCard = document.querySelector('.book-details');
+            bookCard.style.opacity = '0';
+            bookCard.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                bookCard.style.transition = 'all 0.6s ease';
+                bookCard.style.opacity = '1';
+                bookCard.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

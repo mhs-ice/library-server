@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Seminar Library</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="/css/responsive.css">
+</head>
+
+<body>
+    <!-- =================NavBar Start================ -->
+    <div class="navbar-container">
+        <div class="logo">
+            <a href="/"><img src="/assets/Seminar Library Logo (Without BG).png" srcset=""></a>
+        </div>
+
+        <div class="items">
+            <ul>
+                <li>
+                    <div class="search-container">
+                        <input type="text" class="search-input" placeholder="Search...">
+                        <i class="fa fa-search search-icon"></i>
+                    </div>
+                </li>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about/about.html">About</a></li>
+                <li><a href="/book/books.html">Books</a></li>
+                <li><a href="/donate/donate.html">Donate</a></li>
+                <li>
+                    <button class="cart-icon" id="cart-icon" onclick="window.location.href='/checkout/checkout.html'">
+                        <i class="fas fa-list-check" style="font-size: 20px;"></i>
+                        <span class="cart-count" id="cart-count">0</span>
+                    </button>
+                </li>
+                <li><button class="login-btn" onclick="window.location.href='/authentication/login/login.html' ">Login</button>
+                </li>
+                <!-- <li>
+                    <div class="profile-dropdown">
+                        <div class="profile-icon">
+                            <img src="/assets/review1.png" alt="Profile">
+                        </div>
+                        <div class="dropdown-content">
+                            <a href="#">My Profile</a>
+                            <a href="#">Settings</a>
+                            <a href="" class="logout"><button class="mobile-logout-btn"><span><i
+                                            class="fas fa-sign-out-alt"></i></span>&nbsp;Log Out</button></a>
+                        </div>
+                    </div>
+                </li> -->
+            </ul>
+        </div>
+
+        <div class="mobile-menu-btn-container">
+            <div class="search-container">
+                <input type="text" class="mobile-search-input" placeholder="Search Books...">
+                <i class="fa fa-search search-icon" onclick="openSearch()" id="search-icon" style="font-size: 20px; ">
+                </i>
+            </div>
+            <button class="mobile-cart-icon" id="mobile-cart-icon" onclick="window.location.href='/checkout/checkout.html'">
+                <i class="fa fa-list-check" style="font-size: 20px;"></i>
+                <span class="mobile-cart-count" id="mobile-cart-count">0</span>
+            </button>
+            <button class="mobile-menu-btn" onclick="openNav()">
+                <i class="fa fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="overlay" id="overlay"></div>
+        <div id="sidebar" class="sidebar">
+            <button class="close-btn" onclick="closeNav()">&times;</button>
+            <div class="sidebar-content">
+                <div class="user-profile">
+                    <div class="image"><img src="/assets/review1.png" alt="" srcset=""></div>
+                    <div class="name-and-view-profile">
+                        <div class="name">Md Mehedi Hasan</div>
+                        <div class="view-profile"><a href="#">View Profile ></a></div>
+                    </div>
+                </div>
+                <a href="/">Home</a>
+                <a href="/about/about.html">About</a>
+                <a href="/book/books.html">Books</a>
+                <a href="/donate/donate.html">Donate</a>
+                <button class="mobile-login-btn"><span><i class="fas fa-sign-in-alt"></i></span>&nbsp;Login</button>
+                <button class="mobile-logout-btn"><span><i class="fas fa-sign-out-alt"></i></span>&nbsp;Log Out</button>
+            </div>
+        </div>
+        <!-- =============== Cart Start ================ -->
+        <div class="cartOverlay" id="cartOverlay"></div>
+        <div class="cart-sidebar" id="cart-sidebar">
+            <div class="header">
+                <img src="/assets/Your Cart.png" width="50px" alt="" srcset="">
+                <div class="close-cart" id="close-cart"><i class="fas fa-times"></i></div>
+            </div>
+            <div class="cart-content">
+                <div class="empty-cart">
+                    <h2>Your Checklist is Empty</h2>
+                    <img src="/assets/empty-cart.png" alt="" srcset="">
+                </div>
+                <div class="item-container" id="item-container">
+                    <div class="image-and-details">
+                        <div class="image"></div>
+                        <div class="details">
+                            <h4 class="book-title"></h4>
+                            <p class="book-author"></p>
+                        </div>
+                    </div>
+                    <div class="remove">Remove</div>
+                </div>
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <span>Total Books:</span>
+                    <p id="cart-total">0</p>
+                </div>
+                <button class="proceed-btn" onclick="window.location.href='/checkout/checkout.html'">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+    <!-- ===============Navbar End====================== -->
+
+    <!-- Spinner Overlay -->
+    <div id="spinner-overlay">
+        <div class="spinner" id="spinner"></div>
+    </div>
+
+    <div class="login-container">
+        <div class="login-logo">
+            <a href="/index.html"><img src="/assets/Seminar Library Logo (Without BG).png" alt="Company Logo"></a>
+        </div>
+
+        <h1>Welcome Back</h1>
+        <p class="subtitle">Please enter your details to sign in</p>
+
+        <form id="loginForm" class="loginForm">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                <div class="error-message" id="email-error">Please enter a valid email address</div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                <a href="/authentication/forgot pass/forgot-password.html" class="forgot-password">Forgot password?</a>
+                <div class="error-message" id="password-error">Password must be at least 6 characters</div>
+            </div>
+            <button type="submit" class="btn btn-primary">Sign In</button>
+        </form>
+
+        <div class="divider">or continue with</div>
+
+        <div class="social-login">
+            <button type="button" class="btn btn-social google-btn">
+                <i class="fab fa-google"></i> Sign in with Google
+            </button>
+            <!-- <button type="button" class="btn btn-social github-btn">
+                <i class="fab fa-github"></i> Sign in with GitHub
+            </button>
+            <button type="button" class="btn btn-social facebook-btn">
+                <i class="fab fa-facebook"></i> Sign in with Facebook
+            </button> -->
+        </div>
+
+        <p class="signup-link">
+            Don't have an account? <a href="/authentication/signup/signup.html">Sign up</a>
+        </p>
+    </div>
+
+    <!-- ========Footer Start ================= -->
+    <footer class="footer">
+        <div class="footer-container">
+
+            <!-- About -->
+            <div class="footer-section">
+                <h2>About Us</h2>
+                <p>The Seminar Library of ICE, RU provides access to academic resources that support research and
+                    learning for students and faculty.</p>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="footer-section">
+                <h2>Quick Links</h2>
+                <ul>
+                    <li><a href="i/ndex.html">Home</a></li>
+                    <li><a href="/book/books.html">Browse Books</a></li>
+                    <li><a href="/authentication/login/login.html">Login</a></li>
+                    <li><a href="/book/books.html">Request a Book</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <!-- Contact -->
+            <div class="footer-section">
+                <h2>Contact Info</h2>
+                <ul>
+                    <li>ICE Dept, University of Rajshahi</li>
+                    <li>Email: <a href="mailto:ice.library@ru.ac.bd">ice.library@ru.ac.bd</a></li>
+                    <li>Phone: 017XXXXXXXX</li>
+                    <li>M.A Wazed Mia Academic Building, University of Rajshahi</li>
+                </ul>
+            </div>
+
+            <!-- External Links -->
+            <div class="footer-section">
+                <h2>Connect</h2>
+                <ul>
+                    <li><a href="https://www.ru.ac.bd/ice/">ICE Dept Website</a></li>
+                    <li><a href="https://www.ru.ac.bd/">RU Official Site</a></li>
+                    <li><a href="https://web.facebook.com/groups/408338792613622">Facebook Page</a></li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2025 ICE Seminar Library, RU. Designed by Mehedi.</p>
+        </div>
+    </footer>
+    <!-- =========Footer End============== -->
+
+    <script type="module">
+        import { auth } from '../config/firebase-config.js';
+        import {
+            signInWithEmailAndPassword,
+            signInWithPopup,
+            GoogleAuthProvider
+            // GithubAuthProvider,
+            // FacebookAuthProvider
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const googleBtn = document.querySelector('.google-btn');
+        const githubBtn = document.querySelector('.github-btn');
+        const facebookBtn = document.querySelector('.facebook-btn');
+
+        async function socialSignIn(provider) {
+            try {
+                showSpinner();
+                await signInWithPopup(auth, provider);
+                window.location.href = '/index.html';
+            } catch (error) {
+                console.error("Social sign-in error:", error);
+            } finally {
+                hideSpinner();
+            }
+        }
+
+        googleBtn.addEventListener('click', () => {
+            const provider = new GoogleAuthProvider();
+            socialSignIn(provider);
+        });
+
+        // githubBtn.addEventListener('click', () => {
+        //     const provider = new GithubAuthProvider();
+        //     socialSignIn(provider);
+        // });
+
+        // facebookBtn.addEventListener('click', () => {
+        //     const provider = new FacebookAuthProvider();
+        //     socialSignIn(provider);
+        // });
+
+
+        const loginForm = document.getElementById('loginForm');
+        const spinner = document.getElementById('spinner');
+        const loginButton = document.querySelector('button[type="submit"]');
+        const emailError = document.getElementById('email-error');
+        const passwordError = document.getElementById('password-error');
+
+        const spinnerOverlay = document.getElementById('spinner-overlay');
+
+        function showSpinner() {
+            spinnerOverlay.style.display = 'flex';
+        }
+
+        function hideSpinner() {
+            spinnerOverlay.style.display = 'none';
+        }
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Reset errors and show spinner
+            emailError.style.display = 'none';
+            passwordError.style.display = 'none';
+            spinner.style.display = 'block';
+            loginButton.disabled = true;
+
+            showSpinner();
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                window.location.href = '/index.html';
+            } catch (error) {
+                hideSpinner();
+                console.error("Login error:", error);
+
+                // Show appropriate error message
+                spinner.style.display = 'none';
+                loginButton.disabled = false;
+                passwordError.style.display = 'block';
+
+                switch (error.code) {
+                    case 'auth/invalid-email':
+                        emailError.style.display = 'block';
+                        break;
+                    case 'auth/user-not-found':
+                    case 'auth/wrong-password':
+                        passwordError.textContent = "Invalid email or password.";
+                        break;
+                    case 'auth/too-many-requests':
+                        passwordError.textContent = "Too many attempts. Try again later.";
+                        break;
+                    default:
+                        passwordError.textContent = "An unexpected error occurred.";
+                }
+            }
+        });
+
+        // Hide password error on input change
+        document.getElementById('password').addEventListener('input', () => {
+            passwordError.style.display = 'none';
+        });
+    </script>
+    <script src="common.js"></script>
+
+</body>
+
+</html>

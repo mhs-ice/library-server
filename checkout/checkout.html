@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Checkout - User Information</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="checkout.css">
+</head>
+
+<body>
+    <div class="checkout-container" id="form-to-pdf">
+        <div class="checkout-header">
+            <h1><i class="fas fa-book"></i> Seminar Library Checkout, ICE</h1>
+            <p>Please fill in your information to complete the borrowing process</p>
+        </div>
+
+        <div class="checkout-content">
+            <div class="user-form-section">
+                <h2 class="section-title">
+                    <i class="fas fa-user"></i>
+                    Personal Information
+                </h2>
+
+                <form id="checkout-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name <span class="required">*</span></label>
+                            <input type="text" id="firstName" name="firstName" required>
+                            <div class="error-message">Please enter your first name</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name <span class="required">*</span></label>
+                            <input type="text" id="lastName" name="lastName" required>
+                            <div class="error-message">Please enter your last name</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address <span class="required">*</span></label>
+                        <input type="email" id="email" name="email" required>
+                        <div class="error-message">Please enter a valid email address</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number <span class="required">*</span></label>
+                        <input type="tel" id="phone" name="phone" required>
+                        <div class="error-message">Please enter your phone number</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="studentId">Student ID <span class="required">*</span></label>
+                        <input type="text" id="studentId" name="studentId" required>
+                        <div class="error-message">Please enter your student or member ID</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="returndate">Return Date <span class="required">*</span></label>
+                        <input type="date" id="returndate" name="returndate" required>
+                        <div class="error-message">Please enter when you want to return</div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="department">Department/Faculty</label>
+                            <select id="department" name="department">
+                                <option value="">Select Department</option>
+                                <option value="Computer Science">Information and Communication Engineering (ICE)
+                                </option>
+                                <option value="Electrical Engineering">Electrical and Electronics Engineering EEE)
+                                </option>
+                                <option value="Mechanical Engineering">Material Science and Engineering (ME)</option>
+                                <option value="Mathematics">Computer Science and Engineering (CSE)</option>
+                                <option value="Business">Applied Chemistry and Chemical Engineering (ACCE)</option>
+                                <option value="Literature">Pharmacy</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="year">Session</label>
+                            <select id="year" name="year">
+                                <option value="">Select Session</option>
+                                <option value="1st Year">2017-18</option>
+                                <option value="2nd Year">2018-19</option>
+                                <option value="3rd Year">2019-20</option>
+                                <option value="3rd Year">2020-21</option>
+                                <option value="3rd Year">2021-22</option>
+                                <option value="4th Year">2022-23</option>
+                                <option value="4th Year">2023-24</option>
+                                <option value="Graduate">Graduate</option>
+                                <option value="Faculty">Faculty</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <textarea id="address" name="address" placeholder="Enter your full address"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Special Notes (Optional)</label>
+                        <textarea id="notes" name="notes" placeholder="Any special requirements or notes"></textarea>
+                    </div>
+                </form>
+            </div>
+
+            <div class="order-summary-section">
+                <h2 class="section-title">
+                    <i class="fas fa-list"></i>
+                    Borrowing Summary
+                </h2>
+
+                <div id="books-list">
+                    <!-- Books will be loaded here -->
+                </div>
+
+                <div class="summary-total">
+                    <span>Total Books:</span>
+                    <span id="total-books">0</span>
+                </div>
+
+                <div style="margin-top: 20px; padding: 15px; background: #e8f5e8; border-radius: 8px;">
+                    <h4 style="color: #28a745; margin-bottom: 10px;">
+                        <i class="fas fa-info-circle"></i> Borrowing Terms
+                    </h4>
+                    <ul style="color: #666; font-size: 0.9rem; margin-left: 20px;">
+                        <li>Books can be borrowed for up to 14 days</li>
+                        <li>Late returns may incur fines</li>
+                        <li>Books must be returned in good condition</li>
+                        <li>You'll receive an email confirmation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="submit-section">
+            <button type="button" class="submit-btn" id="submit-btn">
+                <i class="fas fa-file-pdf" id="generatePdf"></i> Generate Receipt & Complete Checkout
+            </button>
+            <a href="/index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> Back to Library
+            </a>
+        </div>
+
+        <!-- <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Generating your receipt...</p>
+        </div> -->
+    </div>
+    <script>
+        // Initialize jsPDF (corrected)
+        const { jsPDF } = window.jspdf || {};
+
+        document.querySelector('.submit-btn').addEventListener('click', function () {
+            // First check if there are books
+            const checkoutItems = JSON.parse(localStorage.getItem('cart') || '[]');
+            if (checkoutItems.length === 0) {
+                alert('Please add at least one book to checkout');
+                return;
+            }
+
+            // Then validate the form
+            if (!validateForm()) {
+                alert('Please fill all required fields correctly');
+                return;
+            }
+
+            // If all validations pass, generate PDF
+            generatePdf();
+        });
+
+        function validateForm() {
+            const form = document.getElementById('checkout-form');
+            const requiredFields = form.querySelectorAll('input[required], select[required]');
+            let isValid = true;
+
+            requiredFields.forEach(field => {
+                const formGroup = field.closest('.form-group');
+                const errorMessage = formGroup.querySelector('.error-message');
+
+                // Clear previous errors
+                formGroup.classList.remove('error');
+                if (errorMessage) errorMessage.style.display = 'none';
+
+                // Check if field is empty
+                if (!field.value.trim()) {
+                    formGroup.classList.add('error');
+                    if (errorMessage) errorMessage.style.display = 'block';
+                    isValid = false;
+                }
+
+                // Special validation for email
+                if (field.type === 'email' && field.value) {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(field.value)) {
+                        formGroup.classList.add('error');
+                        if (errorMessage) errorMessage.textContent = 'Please enter a valid email address';
+                        if (errorMessage) errorMessage.style.display = 'block';
+                        isValid = false;
+                    }
+                }
+
+                // Special validation for phone number
+                if (field.id === 'phone' && field.value) {
+                    const phoneRegex = /^[0-9]{10,15}$/; // Adjust regex as needed
+                    if (!phoneRegex.test(field.value)) {
+                        formGroup.classList.add('error');
+                        if (errorMessage) errorMessage.textContent = 'Please enter a valid phone number';
+                        if (errorMessage) errorMessage.style.display = 'block';
+                        isValid = false;
+                    }
+                }
+            });
+
+            return isValid;
+        }
+
+        function generatePdf() {
+            // First validate the form
+            if (!validateForm()) {
+                alert('Please fill all required fields correctly');
+                return;
+            }
+
+            // Then check if there are books in cart
+            const checkoutItems = JSON.parse(localStorage.getItem('cart') || '[]');
+            if (checkoutItems.length === 0) {
+                alert('Please add at least one book to checkout');
+                return;
+            }
+
+            const element = document.getElementById('form-to-pdf');
+            const loading = document.getElementById('loading');
+
+            // Show loading spinner
+            // loading.style.display = 'flex';
+
+            // Delay to ensure UI updates
+            setTimeout(() => {
+                html2canvas(element, {
+                    scale: 2,
+                    logging: true,
+                    useCORS: true,
+                }).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    const pdfWidth = element.offsetWidth / 2;
+                    const pdfHeight = (element.offsetHeight / element.offsetWidth) * pdfWidth;
+
+                    const pdf = new jsPDF('p', 'pt', [pdfWidth, pdfHeight]);
+                    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                    pdf.save('seminar-library-checkout-ICE.pdf');
+                    loading.style.display = 'none';
+                }).catch(err => {
+                    console.error('Failed to generate PDF:', err);
+                    loading.style.display = 'none';
+                    alert('PDF generation failed. Please try again.');
+                });
+            }, 100);
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+            loadCheckoutItems();
+        });
+
+        function loadCheckoutItems() {
+            const checkoutItems = JSON.parse(localStorage.getItem('cart') || '[]');
+            const booksListContainer = document.getElementById('books-list');
+            const totalBooksElement = document.getElementById('total-books');
+
+            if (checkoutItems.length === 0) {
+                booksListContainer.innerHTML = '<p style="text-align: center; color: #666;">No books selected for checkout</p>';
+                totalBooksElement.textContent = '0';
+                return;
+            }
+
+            let booksHTML = '';
+            checkoutItems.forEach((book, index) => {
+                booksHTML += `
+            <div class="book-item" data-book-id="${index}">
+                <img src="${book.img || 'assets/books/default.jpg'}" alt="${book.title}" class="book-image">
+                <div class="book-details">
+                    <h4>${book.name}</h4>
+                    <p>by ${book.author}</p>
+                </div>
+                <button class="remove-btn remove" data-book-id="${index}">Remove</button>
+            </div>
+        `;
+            });
+
+            booksListContainer.innerHTML = booksHTML;
+            totalBooksElement.textContent = checkoutItems.length;
+
+            // Add event listeners to all remove buttons
+            document.querySelectorAll('.remove-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const bookIndex = this.getAttribute('data-book-id');
+                    removeBookFromCart(bookIndex);
+                });
+            });
+        }
+
+        function removeBookFromCart(index) {
+            let cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
+
+            // Remove the item at the specified index
+            cartItems.splice(index, 1);
+
+            // Update localStorage
+            localStorage.setItem('cart', JSON.stringify(cartItems));
+
+            // Refresh the display
+            loadCheckoutItems();
+        }
+
+
+
+
+
+        document.getElementById("submit-btn").addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const form = e.target;
+            const now = new Date().toISOString();
+
+            const data = {
+                studentId: form.studentId.value,
+                firstName: form.firstName.value,
+                lastName: form.lastName.value,
+                email: form.email.value,
+                phone: form.phone.value,
+                borrowed_date: now,
+                returndate: form.returndate.value,
+                department: form.department.value,
+                year: form.year.value,
+                address: form.address.value,
+                notes: form.notes.value,
+                created_at: now
+            };
+
+            try {
+                const response = await fetch("/borrow-checkout", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                alert(result.message);
+                form.reset();
+            } catch (err) {
+                alert("Error submitting book donation: " + err.message);
+            }
+        });
+    </script>
+</body>

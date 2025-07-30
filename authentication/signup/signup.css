@@ -1,0 +1,143 @@
+ * {
+     box-sizing: border-box;
+     font-family: 'Arial', sans-serif;
+ }
+
+ body {
+     background-color: white;
+     margin: 0;
+     padding: 0;
+     /* display: flex; */
+     /* justify-content: center; */
+     min-height: 100vh;
+ }
+
+ .container {
+     background-color: white;
+     border-radius: 8px;
+     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+     width: 590px;
+     padding: 30px;
+     transition: all 0.3s ease;
+     margin: auto;
+     /* padding-top: 150px; */
+     position: relative;
+     top: 150px;
+     margin-bottom: 200px;
+ }
+
+ .signup-form h2 {
+     text-align: center;
+     margin-bottom: 20px;
+     color: #333;
+ }
+
+ .signup-form p {
+     text-align: center;
+     color: #777;
+     margin-bottom: 30px;
+ }
+
+ .form-group {
+     margin-bottom: 20px;
+ }
+
+ .form-group label {
+     display: block;
+     margin-bottom: 5px;
+     font-weight: 600;
+     color: #555;
+ }
+
+ .form-group input,
+ select {
+     width: 100%;
+     padding: 10px;
+     border: 1px solid #ddd;
+     border-radius: 4px;
+     font-size: 14px;
+ }
+
+ .form-group input:focus,
+ select:focus {
+     outline: none;
+     border-color: #9333ea;
+ }
+
+ button {
+     width: 100%;
+     padding: 12px;
+     background-color: #9333ea;
+     color: white;
+     border: none;
+     border-radius: 4px;
+     font-size: 16px;
+     font-weight: 600;
+     cursor: pointer;
+     transition: background-color 0.3s;
+ }
+
+ button:hover {
+     background-color: #8715f2;
+ }
+
+ .toggle-form {
+     text-align: center;
+     margin-top: 20px;
+     color: #666;
+ }
+
+ .toggle-form a {
+     color: #9333ea;
+     text-decoration: none;
+     font-weight: 600;
+     cursor: pointer;
+ }
+
+ .toggle-form a:hover {
+     text-decoration: underline;
+ }
+
+ .dob-group {
+     display: flex;
+     gap: 10px;
+ }
+
+ .dob-group select {
+     flex: 1;
+ }
+
+ 
+#spinner-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 0.7);
+    z-index: 9999;
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+}
+
+.spinner {
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #9333ea;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1.5s linear infinite;
+}
+
+/* Spinner Animation */
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

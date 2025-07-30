@@ -1,0 +1,97 @@
+/* ===============Startup animation================ */
+@media (max-width: 992px) {
+    .text {
+        font-size: 18px;
+        text-align: center;
+        width: 60%;
+    }
+
+    .items ul li {
+        display: none;
+    }
+
+    .mobile-menu-btn-container {
+        /* display: block; */
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .cart-count {
+        font-size: 8px;
+    }
+    .book-grid{
+        grid-template-columns: repeat(2,1fr);
+        grid-template-rows: repeat(3,1fr);
+    }
+}
+
+
+@media (max-width: 576px) {
+
+    .items ul {
+        gap: 10px;
+    }
+
+    .startup-container .logo img {
+        width: 140px;
+    }
+
+    .slider-overlay h1 {
+        font-size: 4.5vw;
+    }
+
+    .slider-overlay p {
+        font-size: 1.8vw;
+    }
+
+    .slider-overlay button {
+        font-size: 2vw;
+        padding: 5px 10px;
+    }
+
+    .service h1{
+        font-size: 28px;
+    }
+
+    .new-featured-books .section-title {
+        font-size: 1.3rem;
+    }
+
+    .new-featured-books .view-all-books {
+        font-size: 12px;
+    }
+
+    .show-more, .notice-show-more {
+        font-size: 20px;
+    }
+     .book-grid{
+        grid-template-columns: repeat(1,1fr);
+        grid-template-rows: repeat(6,1fr);
+    }
+    .stars{
+        font-size: 20px;
+    }
+    .footer{
+        text-align: center;
+    }
+
+     .name-and-view-profile .name {
+        font-size: 16px;
+     }
+
+      .name-and-view-profile .view-profile a {
+        font-size: 12px;
+      }
+}
+
+@media (max-width: 630px) {
+    .stat {
+        width: 80vw;
+    }
+}
+@media (max-width: 870px) {
+    .service-cards{
+        width: 80vw;
+    }
+}
