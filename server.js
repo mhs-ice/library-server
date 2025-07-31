@@ -7,6 +7,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use(express.static(path.join(__dirname)));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/about', express.static(path.join(__dirname, 'about')));
 app.use('/book', express.static(path.join(__dirname, 'book')));
@@ -55,6 +56,8 @@ app.post('/borrow-checkout', (req, res) => {
     });
   });
 });
+
+
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

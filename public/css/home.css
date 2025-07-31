@@ -288,11 +288,11 @@
      background-color: #f5f5f5;
  }
 
- .dropdown-content .logout:hover{
-    background-color: transparent;
+ .dropdown-content .logout:hover {
+     background-color: transparent;
  }
 
-  .dropdown-content .mobile-logout-btn {
+ .dropdown-content .mobile-logout-btn {
      color: red;
      padding: 8px 16px;
      background-color: transparent;
@@ -971,7 +971,7 @@
  }
 
 
- .book-card button {
+ .book-card .btns>button {
      width: 50%;
      margin-bottom: 15px;
      padding: 8px 16px;
@@ -984,9 +984,33 @@
      transition: background 0.3s ease-in;
  }
 
- .book-card button:hover {
+ .book-card .btns>button:hover {
      background-color: #7e22ce;
      color: white;
+ }
+
+
+ .btns a {
+     width: 50%;
+     margin-bottom: 15px;
+     padding: 8px 16px;
+     background-color: transparent;
+     color: black;
+     border: 1px solid #9333ea;
+     border-radius: 5px;
+     cursor: pointer;
+     font-weight: 500;
+     transition: background 0.3s ease-in;
+ }
+
+ .btns a:hover {
+     background-color: #7e22ce;
+     color: white;
+ }
+
+ .download-btn {
+     background: transparent;
+     border: none;
  }
 
  .show-more {
