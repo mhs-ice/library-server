@@ -98,6 +98,16 @@ app.post('/submit-support', (req, res) => {
   });
 });
 
+app.get('/featured-books', (req, res) =>{
+  const sql='select * from books';
+  db.query(sql, (err, results)=>{
+    if(err){
+      console.log("Error:", err)
+      return res.status(500).json({error: 'Error in fetching books'})
+    }
+    res.json(results)
+  })
+})
 
 
 app.use((err, req, res, next) => {
