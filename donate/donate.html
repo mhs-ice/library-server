@@ -134,19 +134,19 @@
     <!-- Donate Books -->
     <div id="book" class="tab-content active">
       <h2>Donate Books</h2>
-      <form>
-        <input type="text" placeholder="Book Title *" required />
-        <input type="text" placeholder="Author *" required />
+      <form id="bookForm">
+        <input type="text" name="title" placeholder="Book Title *" required />
+        <input type="text" name="author" placeholder="Author *" required />
         <div class="row">
-          <select required>
+          <select name="condition" required>
             <option value="">Condition *</option>
             <option value="good">Good</option>
             <option value="fair">Fair</option>
             <option value="poor">Poor</option>
           </select>
-          <input type="text" placeholder="ISBN (Optional)" />
+          <input type="text" name="isbn" placeholder="ISBN (Optional)" />
         </div>
-        <textarea placeholder="Tell us more about your book donation..."></textarea>
+        <textarea name="description" placeholder="Tell us more about your book donation..."></textarea>
         <button type="submit" class="blue-btn">Submit Book Donation</button>
       </form>
     </div>
@@ -154,37 +154,97 @@
     <!-- Financial Support -->
     <div id="support" class="tab-content">
       <h2>Financial Support</h2>
-      <form>
+      <form id="supportForm">
         <div class="donation-amounts">
-          <label><input type="radio" name="amount" /> $10</label>
-          <label><input type="radio" name="amount" checked /> $25</label>
-          <label><input type="radio" name="amount" /> $50</label>
-          <label><input type="radio" name="amount" /> $100</label>
+          <label><input type="radio" name="amount" value="10" /> $10</label>
+          <label><input type="radio" name="amount" value="25" checked /> $25</label>
+          <label><input type="radio" name="amount" value="50" /> $50</label>
+          <label><input type="radio" name="amount" value="100" /> $100</label>
           <label>
-            <input type="radio" name="amount" /> Custom:
-            <input type="number" placeholder="Enter amount" />
+            <input type="radio" name="amount" value="custom" /> Custom:
+            <input type="number" name="customAmount" placeholder="Enter amount" />
           </label>
         </div>
         <div class="row">
-          <input type="text" placeholder="Your Name" />
-          <input type="email" placeholder="Email" />
+          <input type="text" name="donor_name" placeholder="Your Name" />
+          <input type="email" name="donor_email" placeholder="Email" />
         </div>
-        <textarea placeholder="Tell us why you're supporting the library..."></textarea>
-        <label><input type="checkbox" /> Make my donation anonymous</label>
+        <textarea name="message" placeholder="Tell us why you're supporting the library..."></textarea>
+        <!-- <label><input type="checkbox" name="anonymous" /> Make my donation anonymous</label> -->
         <button type="submit" class="yellow-btn">Donate Now</button>
         <p class="secure-text">Secure payment powered by Stripe</p>
       </form>
     </div>
   </div>
 
-
   <script>
+    // Tab switching function
     function showTab(id) {
-      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.tab').forEach(btn => btn.classList.remove('active'));
       document.getElementById(id).classList.add('active');
       event.target.classList.add('active');
     }
+
+    // Book Donation form submit handler
+    document.getElementById("bookForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const form = e.target;
+
+      const data = {
+        title: form.title.value,
+        author: form.author.value,
+        book_condition: form.condition.value,
+        isbn: form.isbn.value,
+        description: form.description.value
+      };
+
+      try {
+        const response = await fetch("/submit-book", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        alert(result.message);
+        form.reset();
+      } catch (err) {
+        alert("Error submitting book donation: " + err.message);
+      }
+    });
+
+    // Financial Support form submit handler
+    document.getElementById("supportForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const form = e.target;
+      let amount = form.amount.value;
+      if (amount === 'custom') {
+        amount = form.customAmount.value;
+      }
+
+      const data = {
+        amount: amount,
+        donor_name: form.donor_name.value,
+        donor_email: form.donor_email.value,
+        message: form.message.value,
+        anonymous: form.anonymous.checked
+      };
+
+      try {
+        const response = await fetch("/submit-support", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        alert(result.message);
+        form.reset();
+      } catch (err) {
+        alert("Error submitting financial support: " + err.message);
+      }
+    });
   </script>
   <script src="common.js"></script>
 

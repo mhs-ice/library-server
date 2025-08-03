@@ -38,7 +38,7 @@ app.post('/borrow-checkout', (req, res) => {
   const { id, first_name, last_name, email, phone_number, borrowed_date, return_date, department, s_session, address, notes } = req.body;
 
   if (!id || !first_name || !last_name || !email || !phone_number || !borrowed_date) {
-    return res.status(400).json({ 
+    return res.status(400).json({
       error: 'Missing required fields',
       required: ['id', 'first_name', 'last_name', 'email', 'phone_number', 'borrowed_date']
     });
@@ -50,10 +50,51 @@ app.post('/borrow-checkout', (req, res) => {
   `;
 
   db.query(sql, [id, first_name, last_name, email, phone_number, borrowed_date, return_date, department, s_session, address, notes], (err, result) => {
-    res.json({ 
+    if (err) {
+      console.error("Error Occurred:", err);
+      return res.status(500).json({ error: 'Database insertion failed' });
+    }
+    res.json({
       message: 'Borrowing record submitted successfully!',
-      recordId: result.insertId 
+      recordId: result.insertId
     });
+  });
+
+});
+
+// POST API for book donations
+app.post('/submit-book', (req, res) => {
+  const { title, author, book_condition, isbn, description } = req.body;
+
+  const sql = `
+    INSERT INTO book_donations (title, author, book_condition, isbn, description)
+    VALUES (?, ?, ?, ?, ?)
+  `;
+
+  db.query(sql, [title, author, book_condition, isbn, description], (err, result) => {
+    if (err) {
+      console.error('Insert error:', err);
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ message: 'Book donation submitted successfully!' });
+  });
+});
+
+// POST API for financial support
+app.post('/submit-support', (req, res) => {
+  const { amount, donor_name, donor_email, message, anonymous } = req.body;
+
+  const sql = `
+    INSERT INTO financial_supports (amount, donor_name, donor_email, message, anonymous)
+    VALUES (?, ?, ?, ?, ?)
+  `;
+
+  db.query(sql, [amount, donor_name, donor_email, message, anonymous], (err, result) => {
+    if (err) {
+      console.error('Support insert error:', err);
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ message: 'Thank you for your financial support!' });
   });
 });
 
