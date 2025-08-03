@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Signup | Seminar Library</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="signup.css">
-    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="/authentication/signup/signup.css">
+    <link rel="stylesheet" href="/authentication/signup/common.css">
     <link rel="stylesheet" href="/css/responsive.css">
 </head>
 
@@ -27,16 +27,16 @@
                     </div>
                 </li>
                 <li><a href="/">Home</a></li>
-                <li><a href="/about/about.html">About</a></li>
-                <li><a href="/book/books.html">Books</a></li>
-                <li><a href="/donate/donate.html">Donate</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/book">Books</a></li>
+                <li><a href="/donate">Donate</a></li>
                 <li>
-                    <button class="cart-icon" id="cart-icon" onclick="window.location.href='/checkout/checkout.html'">
+                    <button class="cart-icon" id="cart-icon" onclick="window.location.href='/checkout'">
                         <i class="fas fa-list-check" style="font-size: 20px;"></i>
                         <span class="cart-count" id="cart-count">0</span>
                     </button>
                 </li>
-                <li><button class="login-btn" onclick="window.location.href='/authentication/login/login.html' ">Login</button>
+                <li><button class="login-btn" onclick="window.location.href='/login' ">Login</button>
                 </li>
                 <!-- <li>
                     <div class="profile-dropdown">
@@ -60,7 +60,7 @@
                 <i class="fa fa-search search-icon" onclick="openSearch()" id="search-icon" style="font-size: 20px; ">
                 </i>
             </div>
-            <button class="mobile-cart-icon" id="mobile-cart-icon" onclick="window.location.href='/checkout/checkout.html'">
+            <button class="mobile-cart-icon" id="mobile-cart-icon" onclick="window.location.href='/checkout'">
                 <i class="fa fa-list-check" style="font-size: 20px;"></i>
                 <span class="mobile-cart-count" id="mobile-cart-count">0</span>
             </button>
@@ -82,9 +82,9 @@
                     </div>
                 </div>
                 <a href="/">Home</a>
-                <a href="/about/about.html">About</a>
-                <a href="/book/books.html">Books</a>
-                <a href="/donate/donate.html">Donate</a>
+                <a href="/about">About</a>
+                <a href="/book">Books</a>
+                <a href="/donate">Donate</a>
                 <button class="mobile-login-btn"><span><i class="fas fa-sign-in-alt"></i></span>&nbsp;Login</button>
                 <button class="mobile-logout-btn"><span><i class="fas fa-sign-out-alt"></i></span>&nbsp;Log Out</button>
             </div>
@@ -125,7 +125,7 @@
 
     <div class="container">
         <div class="logo" style="display: flex; justify-content: center;">
-            <a href="\index.html"><img src="Seminar Library Logo (Without BG).png" width="80px"
+            <a href="\"><img src="Seminar Library Logo (Without BG).png" width="80px"
                     style="text-align: center;" alt="" srcset=""></a>
         </div>
         <form id="signup-form" class="signup-form">
@@ -174,7 +174,7 @@
             </div>
             <button type="submit">Sign Up</button>
             <div class="toggle-form">
-                Already have an account? <a href="/authentication/login/login.html" id="show-login">Login</a>
+                Already have an account? <a href="/login" id="show-login">Login</a>
             </div>
             <div id="spinner-overlay">
                 <div class="spinner" id="spinner"></div>
@@ -198,10 +198,10 @@
             <div class="footer-section">
                 <h2>Quick Links</h2>
                 <ul>
-                    <li><a href="/index.html">Home</a></li>
-                    <li><a href="/book/books.html">Browse Books</a></li>
-                    <li><a href="/authentication/login/login.html">Login</a></li>
-                    <li><a href="/book/books.html">Request a Book</a></li>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/book">Browse Books</a></li>
+                    <li><a href="/login">Login</a></li>
+                    <li><a href="/book">Request a Book</a></li>
                     <li><a href="#">Contact Us</a></li>
                 </ul>
             </div>
@@ -283,7 +283,7 @@
 
                 // 4. Show success message and redirect to login
                 // alert('Registration successful! Please check your email to verify your account before logging in.');
-                window.location.href = '/authentication/login/login.html';
+                window.location.href = '/login';
 
             } catch (error) {
                 console.error("Error signing up:", error);
@@ -295,7 +295,7 @@
             }
         });
     </script>
-    <script src="common.js"></script>
+    <script src="/authentication/signup/common.js"></script>
 </body>
 
 </html>

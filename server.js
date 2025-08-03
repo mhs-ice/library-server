@@ -19,6 +19,32 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
+app.get('/about', (req, res) => {
+  res.sendFile(path.join(__dirname, 'about', 'about.html'));
+});
+
+app.get('/book', (req, res) => {
+  res.sendFile(path.join(__dirname, 'book', 'books.html'));
+});
+
+app.get('/donate', (req, res) => {
+  res.sendFile(path.join(__dirname, 'donate', 'donate.html'));
+});
+
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname,'authentication', 'login', 'login.html'));
+});
+app.get('/signup', (req, res) => {
+  res.sendFile(path.join(__dirname, 'authentication', 'signup', 'signup.html'));
+});
+app.get('/forgot-pass', (req, res) => {
+  res.sendFile(path.join(__dirname,'authentication', 'forgot-pass', 'forgot-password.html'));
+});
+
+app.get('/checkout', (req, res) => {
+  res.sendFile(path.join(__dirname, 'checkout', 'checkout.html'));
+});
+
 const db = mysql.createConnection({
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
