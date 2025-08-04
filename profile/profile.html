@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile | Library Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="profile-responsive.css">
+</head>
+
+<body>
+    <div class="profile-container">
+        <div class="cover-photo-container">
+            <img src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+                alt="Cover photo" class="cover-photo">
+            <button class="cover-upload-btn">
+                <i class="fas fa-camera"></i> Edit Cover
+            </button>
+        </div>
+
+        <div class="profile-pic-section">
+            <div class="profile-pic-container">
+                <img src="me.jpg" alt="Profile picture" class="profile-pic">
+                <button class="edit-pic-btn">
+                    <i class="fas fa-camera-alt"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="user-info">
+            <div class="user-name">
+                <!-- Md Mehedi Hasan
+                <span class="edit-name" title="Edit name">
+                    <i class="fas fa-pencil-alt"></i>
+                </span> -->
+            </div>
+
+            <div class="user-meta">Student at University of Rajshahi</div>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <!-- <h3>Academic Information</h3>
+                    <p><strong>ID:</strong> 2010477112</p>
+                    <p><strong>Session:</strong> 2019-20</p>
+                    <p><strong>Department:</strong> Information and Communication Engineering</p> -->
+                </div>
+
+                <div class="info-card">
+                    <!-- <h3>Contact Information</h3>
+                    <p><strong>Email:</strong> mehedi@student.ru.ac.bd</p>
+                    <p><strong>Phone:</strong> +880 1XXX XXXXXX</p>
+                    <p><strong>Address:</strong> Rajshahi, Bangladesh</p> -->
+                </div>
+            </div> 
+        </div>
+    </div>
+
+    <script>
+        // Function to fetch and display user profile
+        async function loadUserProfile() {
+            try {
+                const response = await fetch('/profile');
+                // response=response.json()
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        // User not logged in, redirect to login
+                        window.location.href = '/login';
+                        return;
+                    }
+                    throw new Error('Failed to fetch profile');
+                }
+
+                const userData = await response.json();
+
+                // Update the DOM with user data
+                updateProfileUI(userData);
+
+            } catch (error) {
+                console.error('Error loading profile:', error);
+            }
+        }
+
+        // Function to update UI with user data
+        function updateProfileUI(user) {
+            // Update user name
+            const userName = document.querySelector('.user-name');
+            userName.innerHTML = `
+        ${user.first_name || 'User Name'}
+        <span class="edit-name" title="Edit name">
+            <i class="fas fa-pencil-alt"></i>
+        </span>
+    `;
+
+            // Update academic information
+            const academicInfo = document.querySelector('.info-card:first-child');
+            academicInfo.innerHTML = `
+        <h3>Academic Information</h3>
+        <p><strong>ID:</strong> ${user.student_id || 'N/A'}</p>
+        <p><strong>Session:</strong> ${user.year || 'N/A'}</p>
+        <p><strong>Department:</strong> ${user.department || 'N/A'}</p>
+    `;
+
+            // Update contact information
+            const contactInfo = document.querySelector('.info-card:last-child');
+            contactInfo.innerHTML = `
+        <h3>Contact Information</h3>
+        <p><strong>Email:</strong> ${user.email || 'N/A'}</p>
+        <p><strong>Phone:</strong> ${user.phone || 'N/A'}</p>
+        <p><strong>Address:</strong> ${user.address || 'N/A'}</p>
+    `;
+
+            // Update user meta (status/university)
+            const userMeta = document.querySelector('.user-meta');
+            userMeta.textContent = user.university || 'Student';
+
+            // Update profile picture if URL is available
+            if (user.profile_pic) {
+                const profilePic = document.querySelector('.profile-pic');
+                profilePic.src = user.profile_pic;
+            }
+        }
+
+        // Function to show error messages
+        // function showError(message) {
+        //     // Create error element if it doesn't exist
+        //     let errorDiv = document.querySelector('.error-message');
+        //     if (!errorDiv) {
+        //         errorDiv = document.createElement('div');
+        //         errorDiv.className = 'error-message';
+        //         document.querySelector('.profile-container').prepend(errorDiv);
+        //     }
+        //     errorDiv.textContent = message;
+        //     errorDiv.style.display = 'block';
+
+        //     // Hide after 5 seconds
+        //     setTimeout(() => {
+        //         errorDiv.style.display = 'none';
+        //     }, 5000);
+        // }
+
+        // Load profile when page loads
+        document.addEventListener('DOMContentLoaded', loadUserProfile);
+
+    </script>
+</body>
+
+</html>

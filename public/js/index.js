@@ -374,8 +374,8 @@ async function loadFeaturedBooks() {
 document.addEventListener('DOMContentLoaded', loadFeaturedBooks);
 
 
+// ===============================login/signup start=========================
 
-// Check authentication status on page load
 document.addEventListener('DOMContentLoaded', function() {
     checkAuthStatus();
 });
