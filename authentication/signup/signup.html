@@ -125,8 +125,8 @@
 
     <div class="container">
         <div class="logo" style="display: flex; justify-content: center;">
-            <a href="\"><img src="Seminar Library Logo (Without BG).png" width="80px"
-                    style="text-align: center;" alt="" srcset=""></a>
+            <a href="\"><img src="Seminar Library Logo (Without BG).png" width="80px" style="text-align: center;" alt=""
+                    srcset=""></a>
         </div>
         <form id="signup-form" class="signup-form">
             <h2>Create Account</h2>
@@ -153,16 +153,46 @@
                 <input type="number" id="student_id" required>
             </div>
             <div class="form-group">
-                <label for="session">Session</label>
-                <input type="text" id="session" required>
+                <label for="department">Department</label>
+                <select id="department" name="department" required>
+                    <option value="">Select Department</option>
+                    <option value="Computer Science">Information and Communication Engineering (ICE)
+                    </option>
+                    <option value="Electrical Engineering">Electrical and Electronics Engineering (EEE)
+                    </option>
+                    <option value="Mechanical Engineering">Material Science and Engineering (ME)</option>
+                    <option value="Mathematics">Computer Science and Engineering (CSE)</option>
+                    <option value="Business">Applied Chemistry and Chemical Engineering (ACCE)</option>
+                    <option value="Literature">Pharmacy</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="year">Session</label>
+                <select id="year" name="year" required>
+                    <option value="">Select Session</option>
+                    <option value="1st Year">2017-18</option>
+                    <option value="2nd Year">2018-19</option>
+                    <option value="3rd Year">2019-20</option>
+                    <option value="3rd Year">2020-21</option>
+                    <option value="3rd Year">2021-22</option>
+                    <option value="4th Year">2022-23</option>
+                    <option value="4th Year">2023-24</option>
+                    <option value="Graduate">Graduate</option>
+                    <option value="Faculty">Faculty</option>
+                </select>
             </div>
             <div class="form-group">
                 <label for="gender">Gender</label>
-                <select id="gender" required>
+                <select id="gender">
                     <option value="">Select Gender</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                 </select>
+            </div>
+            <div class="form-group">
+                <label for="phone">Address</label>
+                <input type="text" id="address">
             </div>
             <div class="form-group">
                 <label for="signup-password">Password</label>
@@ -182,7 +212,7 @@
         </form>
     </div>
 
-    
+
     <!-- ========Footer Start ================= -->
     <footer class="footer">
         <div class="footer-container">
@@ -235,7 +265,7 @@
     </footer>
     <!-- =========Footer End============== -->
 
-    <script type="module">
+    <!-- <script type="module">
         import { auth, db } from '../config/firebase-config.js';
         import { createUserWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -293,8 +323,53 @@
                 spinnerOverlay.style.display = 'none';
                 submitButton.disabled = false;
             }
+            }); 
+        </script>-->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const signupForm = document.getElementById('signup-form'); 
+
+            if (signupForm) {
+                signupForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+
+                    const student_id = document.getElementById('student_id').value; 
+                    const first_name = document.getElementById('first-name').value; 
+                    const last_name = document.getElementById('last-name').value; 
+                    const email = document.getElementById('signup-email').value; 
+                    const phone = document.getElementById('phone').value; 
+                    const department = document.getElementById('department').value; 
+                    const year = document.getElementById('year').value; 
+                    const address = document.getElementById('address').value; 
+                    const pass = document.getElementById('signup-password').value; 
+
+                    try {
+                        const response = await fetch('/api/auth/signup', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ student_id, first_name, last_name, email, phone, department, year, address, pass})
+                        });
+
+                        const result = await response.json();
+
+                        if (response.ok) {
+                            alert('Signup successful! Please login.');
+                            window.location.href = '/login';
+                        } else {
+                            alert(result.message || 'Signup failed');
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('An error occurred. Please try again.');
+                    }
+                });
+            }
         });
     </script>
+
     <script src="/authentication/signup/common.js"></script>
 </body>
 

@@ -36,7 +36,7 @@
                         <span class="cart-count" id="cart-count">0</span>
                     </button>
                 </li>
-                <li><button class="login-btn" onclick="window.location.href='/authentication/login' ">Login</button>
+                <li><button class="login-btn" onclick="window.location.href='/login' ">Login</button>
                 </li>
                 <!-- <li>
                     <div class="profile-dropdown">
@@ -146,7 +146,7 @@
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" placeholder="Enter your password" required>
-                <a href="/authentication/forgot pass" class="forgot-password">Forgot password?</a>
+                <a href="/forgot-pass" class="forgot-password">Forgot password?</a>
                 <div class="error-message" id="password-error">Password must be at least 6 characters</div>
             </div>
             <button type="submit" class="btn btn-primary">Sign In</button>
@@ -223,7 +223,7 @@
     </footer>
     <!-- =========Footer End============== -->
 
-    <script type="module">
+    <!-- <script type="module">
         import { auth } from '../config/firebase-config.js';
         import {
             signInWithEmailAndPassword,
@@ -323,6 +323,43 @@
 
         document.getElementById('password').addEventListener('input', () => {
             passwordError.style.display = 'none';
+        });
+    </script> -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const loginForm = document.getElementById('loginForm'); // Make sure your form has this ID
+
+            if (loginForm) {
+                loginForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+
+                    const email = document.getElementById('email').value; // Make sure input has id="email"
+                    const password = document.getElementById('password').value; // Make sure input has id="password"
+
+                    try {
+                        const response = await fetch('/api/auth/login', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ email, password })
+                        });
+
+                        const result = await response.json();
+
+                        if (response.ok) {
+                            // alert('Login successful!');
+                            window.location.href = '/'; 
+                        } else {
+                            alert(result.message || 'Login failed');
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('An error occurred. Please try again.');
+                    }
+                });
+            }
         });
     </script>
     <script src="/authentication/login/common.js"></script>
