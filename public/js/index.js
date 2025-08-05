@@ -397,13 +397,11 @@ async function checkAuthStatus() {
     }
 }
 
-// Show profile icon and hide login/signup buttons
 function showUserProfile(user) {
     document.getElementById('login-btn').style.display = 'none';
     document.getElementById('profile-dropdown').style.display = 'block';
 }
 
-// Show login/signup buttons and hide profile
 function showGuestButtons() {
     document.getElementById('login-btn').style.display = 'flex';
     document.getElementById('profile-dropdown').style.display = 'none';
@@ -421,7 +419,6 @@ async function logout() {
         });
         
         if (response.ok) {
-            // Redirect to home or login page
             window.location.href = '/login';
         } else {
             alert('Logout failed. Please try again.');

@@ -1,28 +1,30 @@
 const express = require('express');
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 const cors = require('cors');
 const path = require('path');
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
+const session = require('express-session');
+const bcrypt = require('bcrypt');
+
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 require('dotenv').config();
 
-const session = require('express-session');
-const bcrypt = require('bcrypt');
 
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'your-secret-key-change-this',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
     secure: false,
     httpOnly: true,
-    maxAge: 1000 * 60 * 60 * 24 // 24 hours
+    maxAge: 1000 * 60 * 60 * 24 
   }
 }));
 
-app.use(express.static(path.join(__dirname)));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/about', express.static(path.join(__dirname, 'about')));
 app.use('/book', express.static(path.join(__dirname, 'book')));
@@ -59,6 +61,10 @@ app.get('/forgot-pass', (req, res) => {
   res.sendFile(path.join(__dirname, 'authentication', 'forgot-pass', 'forgot-password.html'));
 });
 
+app.get('/reset-password', (req, res) => {
+  res.sendFile(path.join(__dirname, 'authentication', 'forgot-pass', 'reset-password.html'));
+});
+
 app.get('/checkout', requireAuth, (req, res) => {
   res.sendFile(path.join(__dirname, 'checkout', 'checkout.html'));
 });
@@ -67,22 +73,29 @@ app.get('/profile', (req, res) => {
   res.sendFile(path.join(__dirname, 'profile', 'profile.html'));
 });
 
-const db = mysql.createConnection({
+const db = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
+  database: process.env.DB_NAME,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
-db.connect(err => {
-  if (err) {
-    console.error('DB Connection Failed:', err);
-  } else {
-    console.log('MySQL Connected!');
+async function testConnection() {
+  try {
+    const connection = await db.getConnection();
+    console.log('Database connected successfully');
+    connection.release();
+  } catch (error) {
+    console.error('Database connection failed:', error);
   }
-});
+}
 
-app.post('/borrow-checkout', (req, res) => {
+testConnection();
+
+app.post('/borrow-checkout', async (req, res) => {
   const { id, first_name, last_name, email, phone_number, borrowed_date, return_date, department, s_session, address, notes } = req.body;
 
   if (!id || !first_name || !last_name || !email || !phone_number || !borrowed_date) {
@@ -97,21 +110,21 @@ app.post('/borrow-checkout', (req, res) => {
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
-  db.query(sql, [id, first_name, last_name, email, phone_number, borrowed_date, return_date, department, s_session, address, notes], (err, result) => {
-    if (err) {
-      console.error("Error Occurred:", err);
-      return res.status(500).json({ error: 'Database insertion failed' });
-    }
+  try {
+    const [result] = await db.query(sql, [id, first_name, last_name, email, phone_number, borrowed_date, return_date, department, s_session, address, notes]);
     res.json({
       message: 'Borrowing record submitted successfully!',
       recordId: result.insertId
     });
-  });
+  } catch (error) {
+    console.error("Error Occurred:", error);
+    res.status(500).json({ error: 'Database insertion failed' });
+  }
 
 });
 
 // POST API for book donations
-app.post('/submit-book', (req, res) => {
+app.post('/submit-book', async (req, res) => {
   const { title, author, book_condition, isbn, description } = req.body;
 
   const sql = `
@@ -119,47 +132,47 @@ app.post('/submit-book', (req, res) => {
     VALUES (?, ?, ?, ?, ?)
   `;
 
-  db.query(sql, [title, author, book_condition, isbn, description], (err, result) => {
-    if (err) {
-      console.error('Insert error:', err);
-      return res.status(500).json({ error: err.message });
-    }
+  try {
+    await db.execute(sql, [title, author, book_condition, isbn, description]);
     res.json({ message: 'Book donation submitted successfully!' });
-  });
+  } catch (err) {
+    console.error('Insert error:', err);
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // POST API for financial support
-app.post('/submit-support', (req, res) => {
+app.post('/submit-support', async (req, res) => {
   const { amount, donor_name, donor_email, message, anonymous } = req.body;
 
   const sql = `
-    INSERT INTO financial_supports (amount, donor_name, donor_email, message, anonymous)
-    VALUES (?, ?, ?, ?, ?)
+    INSERT INTO financial_supports (amount, donor_name, donor_email, message)
+    VALUES (?, ?, ?, ?)
   `;
 
-  db.query(sql, [amount, donor_name, donor_email, message, anonymous], (err, result) => {
-    if (err) {
-      console.error('Support insert error:', err);
-      return res.status(500).json({ error: err.message });
-    }
+  try {
+    await db.execute(sql, [amount, donor_name, donor_email, message]);
     res.json({ message: 'Thank you for your financial support!' });
-  });
+  } catch (err) {
+    console.error('Support insert error:', err);
+    res.status(500).json({ error: err.message });
+  }
 });
 
-app.get('/featured-books', (req, res) => {
+app.get('/featured-books', async (req, res) => {
   const sql = 'select * from books';
-  db.query(sql, (err, results) => {
-    if (err) {
-      console.log("Error:", err)
-      return res.status(500).json({ error: 'Error in fetching books' })
-    }
-    res.json(results)
-  })
+
+  try {
+    const [results] = await db.query(sql);
+    res.json(results);
+  } catch (err) {
+    console.log("Error:", err);
+    res.status(500).json({ error: 'Error in fetching books' });
+  }
 })
 
 
-
-// ----------------------------------------main--------------------------------------------
+// ----------------------------------------AUTHENTICATION--------------------------------------------
 
 // Signup route
 app.post('/api/auth/signup', async (req, res) => {
@@ -167,30 +180,20 @@ app.post('/api/auth/signup', async (req, res) => {
     const { student_id, first_name, last_name, email, phone, department, year, address, pass } = req.body;
 
     const checkUserQuery = 'SELECT * FROM users WHERE email = ? OR student_id = ?';
-    db.query(checkUserQuery, [email, student_id], async (err, results) => {
-      if (err) {
-        console.error('Database error:', err);
-        return res.status(500).json({ message: 'Database error' });
-      }
+    const [results] = await db.query(checkUserQuery, [email, student_id]);
 
-      if (results.length > 0) {
-        return res.status(409).json({ message: 'User already exists' });
-      }
+    if (results.length > 0) {
+      return res.status(409).json({ message: 'User already exists' });
+    }
 
-      const hashedPassword = await bcrypt.hash(pass, 10);
+    const hashedPassword = await bcrypt.hash(pass, 10);
 
-      const insertQuery = 'INSERT INTO users (student_id, first_name, last_name, email, phone, department, year, address, pass) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
-      db.query(insertQuery, [student_id, first_name, last_name, email, phone, department, year, address, hashedPassword], (err, result) => {
-        if (err) {
-          console.error('Insert error:', err);
-          return res.status(500).json({ message: 'Error creating user' });
-        }
+    const insertQuery = 'INSERT INTO users (student_id, first_name, last_name, email, phone, department, year, address, pass) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    const [result] = await db.execute(insertQuery, [student_id, first_name, last_name, email, phone, department, year, address, hashedPassword]);
 
-        res.status(201).json({
-          message: 'User created successfully',
-          userId: result.insertId
-        });
-      });
+    res.status(201).json({
+      message: 'User created successfully',
+      userId: result.insertId
     });
 
   } catch (error) {
@@ -198,7 +201,7 @@ app.post('/api/auth/signup', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
-
+ 
 // Login route
 app.post('/api/auth/login', async (req, res) => {
   try {
@@ -209,39 +212,31 @@ app.post('/api/auth/login', async (req, res) => {
     }
 
     const query = 'SELECT * FROM users WHERE email = ?';
-    db.query(query, [email], async (err, results) => {
-      if (err) {
-        console.error('Database error:', err);
-        return res.status(500).json({ message: 'Database error' });
+    const [results] = await db.query(query, [email]);
+
+    if (results.length === 0) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+    const user = results[0];
+
+    const isPasswordValid = await bcrypt.compare(password, user.pass);
+
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    req.session.userId = user.student_id;
+    req.session.username = user.first_name;
+    req.session.email = user.email;
+
+    res.json({
+      message: 'Login successful',
+      user: {
+        id: user.student_id,
+        username: user.first_name,
+        email: user.email
       }
-
-      if (results.length === 0) {
-        return res.status(401).json({ message: 'Invalid credentials' });
-      }
-
-      const user = results[0];
-
-      const isPasswordValid = await bcrypt.compare(password, user.pass);
-
-      if (!isPasswordValid) {
-        return res.status(401).json({ message: 'Invalid credentials' });
-      }
-
-      // Create session
-      req.session.userId = user.student_id;
-      req.session.username = user.first_name;
-      req.session.email = user.email;
-
-      res.json({
-        message: 'Login successful',
-        user: {
-          id: user.student_id,
-          username: user.first_name,
-          email: user.email
-        }
-      });
     });
-
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({ message: 'Server error' });
@@ -274,7 +269,6 @@ app.get('/api/auth/check', (req, res) => {
   }
 });
 
-
 // Middleware to protect routes
 function requireAuth(req, res, next) {
   if (!req.session.userId) {
@@ -284,27 +278,28 @@ function requireAuth(req, res, next) {
 }
 
 // ==================================login/signup end=======================
-app.get('/profile', (req, res) => {
-  // Check if user is logged in
-  if (!req.session.userId) {
-    return res.status(401).json({ error: 'Not authenticated' });
-  }
 
-  // Get only the logged-in user's data
-  const sql = 'SELECT * FROM users WHERE id = ?';
-  db.query(sql, [req.session.userId], (err, results) => {
-    if (err) {
-      console.log("Error:", err);
-      return res.status(500).json({ error: 'Error fetching user data' });
-    }
-    if (results.length === 0) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-    res.json(results[0]); // Send only the user object, not array
-  });
-});
+// app.get('/profile', (req, res) => {
+//   // Check if user is logged in
+//   if (!req.session.userId) {
+//     return res.status(401).json({ error: 'Not authenticated' });
+//   }
 
-// ------------------main----------------------------------------
+//   // Get only the logged-in user's data
+//   const sql = 'SELECT * FROM users WHERE id = ?';
+//   db.query(sql, [req.session.userId], (err, results) => {
+//     if (err) {
+//       console.log("Error:", err);
+//       return res.status(500).json({ error: 'Error fetching user data' });
+//     }
+//     if (results.length === 0) {
+//       return res.status(404).json({ error: 'User not found' });
+//     }
+//     res.json(results[0]); // Send only the user object, not array
+//   });
+// });
+
+
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Something went wrong!' });
@@ -313,4 +308,106 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
+});
+
+
+
+// ========================Forget password===========================
+// Configure email transporter
+const transporter = nodemailer.createTransport({
+  service: 'gmail', 
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS 
+  }
+});
+
+app.post('/api/forgot-password', async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const [users] = await db.query(
+      'SELECT student_id, email FROM users WHERE email = ?',
+      [email]
+    );
+
+    if (users.length === 0) {
+      return res.json({ message: 'If an account exists with this email, you will receive a password reset link.' });
+    }
+
+    const user = users[0];
+
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+
+    const expiresAt = new Date(Date.now() + 3600000);
+
+    await db.query('DELETE FROM password_resets WHERE student_id = ?', [user.student_id]);
+
+    await db.query(
+      'INSERT INTO password_resets (student_id, token, expires_at) VALUES (?, ?, ?)',
+      [user.student_id, hashedToken, expiresAt]
+    );
+
+    const resetUrl = `http://localhost:5000/reset-password?token=${resetToken}`;
+
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: user.email,
+      subject: 'Password Reset Request',
+      html: `
+                <h2>Password Reset Request</h2>
+                <p>Hello beautiful people,</p>
+                <p>You requested a password reset. Click the link below to reset your password:</p>
+                <a href="${resetUrl}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">Reset Password</a>
+                <p>Or copy and paste this link: ${resetUrl}</p>
+                <p>This link will expire in 1 hour.</p>
+                <p>If you didn't request this, please ignore this email.</p>
+                <h3>From - Mehedi <h3>
+            `
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.json({ message: 'If an account exists with this email, you will receive a password reset link.' });
+
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    res.status(500).json({ message: 'Error processing request' });
+  }
+});
+
+//Reset Password API
+app.post('/reset-password', async (req, res) => {
+  const { token, newPassword } = req.body;
+
+  try {
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+    const [resets] = await db.query(
+      'SELECT * FROM password_resets WHERE token = ? AND expires_at > NOW()',
+      [hashedToken]
+    );
+
+    if (resets.length === 0) {
+      return res.status(400).json({ message: 'Invalid or expired reset token' });
+    }
+
+    const reset = resets[0];
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await db.query(
+      'UPDATE users SET pass = ? WHERE student_id = ?',
+      [hashedPassword, reset.student_id]
+    );
+
+    await db.query('DELETE FROM password_resets WHERE id = ?', [reset.id]);
+
+    res.json({ message: 'Password reset successful' });
+
+  } catch (error) {
+    console.error('Reset password error:', error);
+    res.status(500).json({ message: 'Error resetting password' });
+  }
 });

@@ -16,17 +16,17 @@ document.addEventListener('DOMContentLoaded', function() {
 // ==================== Sidebar Start ======================
 const overlay = document.getElementById("overlay");
 function openNav() {
-  document.getElementById("sidebar").style.width = "300px";
+  document.getElementById("nav-sidebar").style.width = "300px";
   overlay.classList.add("active");
 }
 
 function closeNav() {
-  document.getElementById("sidebar").style.width = "0";
+  document.getElementById("nav-sidebar").style.width = "0";
   overlay.classList.remove("active");
 }
 
 window.addEventListener('click', function (event) {
-  const sidebar = document.getElementById('sidebar');
+  const sidebar = document.getElementById('nav-sidebar');
   const menuBtn = document.querySelector('.mobile-menu-btn');
 
   if (!sidebar.contains(event.target) && event.target !== menuBtn && !menuBtn.contains(event.target)) {
@@ -72,24 +72,24 @@ const cartContent = document.getElementById("item-container");
 const cartTotal = document.getElementById("cart-total");
 
 
-cartIcon.addEventListener('click', () => {
-  cartSidebar.classList.add('open');
-  cartOverlay.classList.add('active');
-});
-mobileCartIcon.addEventListener('click', () => {
-  cartSidebar.classList.add('open');
-  cartOverlay.classList.add('active');
-});
+// cartIcon.addEventListener('click', () => {
+//   cartSidebar.classList.add('open');
+//   cartOverlay.classList.add('active');
+// });
+// mobileCartIcon.addEventListener('click', () => {
+//   cartSidebar.classList.add('open');
+//   cartOverlay.classList.add('active');
+// });
 
-closeCart.addEventListener('click', () => {
-  cartSidebar.classList.remove('open');
-  cartOverlay.classList.remove('active');
-});
+// closeCart.addEventListener('click', () => {
+//   cartSidebar.classList.remove('open');
+//   cartOverlay.classList.remove('active');
+// });
 
-cartOverlay.addEventListener('click', () => {
-  cartSidebar.classList.remove('open');
-  cartOverlay.classList.remove('active');
-});
+// cartOverlay.addEventListener('click', () => {
+//   cartSidebar.classList.remove('open');
+//   cartOverlay.classList.remove('active');
+// });
 
 function addToCart(button) {
   const card = button.closest('.book-card');

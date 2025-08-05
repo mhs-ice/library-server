@@ -21,7 +21,8 @@ body.dark {
 }
 
 body {
-  margin: 0;
+  max-width: 90.1vw;
+  margin: auto;
   font-family: 'Inter', sans-serif;
   background: var(--background);
   color: var(--text);
@@ -29,6 +30,8 @@ body {
 }
 
 .header {
+  position: relative;
+  top: 120px;
   text-align: center;
   padding: 2rem;
   background: var(--primary);
@@ -37,10 +40,13 @@ body {
 }
 
 .container {
+  position: relative;
+  top: 120px;
   display: flex;
   gap: 1rem;
   padding: 2rem;
   flex-wrap: wrap;
+  margin-bottom: 100px;
 }
 
 .sidebar {
@@ -50,6 +56,7 @@ body {
   background: var(--card);
   border-radius: 12px;
   box-shadow: 0 0 8px var(--shadow);
+  height: auto;
 }
 
 .search-box {
@@ -182,7 +189,7 @@ body {
 
 .borrow-btn {
   background: var(--borrow-btn);
-  color: #333;
+  color: #fff;
   padding: 0.4rem 0.8rem;
   border: none;
   border-radius: 8px;
@@ -202,7 +209,7 @@ body.dark .borrow-btn {
 .borrow-btn:hover {
   background: var(--borrow-btn-hover);
   transform: translateY(-2px);
-  color: #333;
+  color: #fff;
 }
 
 body.dark .borrow-btn:hover {
@@ -304,6 +311,8 @@ body.dark .borrow-btn:hover {
 }
 
 .dark-toggle {
+  width: 60px;
+  height: 60px;
   position: fixed;
   bottom: 20px;
   right: 20px;

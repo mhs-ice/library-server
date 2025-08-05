@@ -72,24 +72,24 @@ const cartContent = document.getElementById("item-container");
 const cartTotal = document.getElementById("cart-total");
 
 
-cartIcon.addEventListener('click', () => {
-  cartSidebar.classList.add('open');
-  cartOverlay.classList.add('active');
-});
-mobileCartIcon.addEventListener('click', () => {
-  cartSidebar.classList.add('open');
-  cartOverlay.classList.add('active');
-});
+// cartIcon.addEventListener('click', () => {
+//   cartSidebar.classList.add('open');
+//   cartOverlay.classList.add('active');
+// });
+// mobileCartIcon.addEventListener('click', () => {
+//   cartSidebar.classList.add('open');
+//   cartOverlay.classList.add('active');
+// });
 
-closeCart.addEventListener('click', () => {
-  cartSidebar.classList.remove('open');
-  cartOverlay.classList.remove('active');
-});
+// closeCart.addEventListener('click', () => {
+//   cartSidebar.classList.remove('open');
+//   cartOverlay.classList.remove('active');
+// });
 
-cartOverlay.addEventListener('click', () => {
-  cartSidebar.classList.remove('open');
-  cartOverlay.classList.remove('active');
-});
+// cartOverlay.addEventListener('click', () => {
+//   cartSidebar.classList.remove('open');
+//   cartOverlay.classList.remove('active');
+// });
 
 function addToCart(button) {
   const card = button.closest('.book-card');

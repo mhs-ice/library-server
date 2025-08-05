@@ -72,24 +72,24 @@ const cartContent = document.getElementById("item-container");
 const cartTotal = document.getElementById("cart-total");
 
 
-cartIcon.addEventListener('click', () => {
-  cartSidebar.classList.add('open');
-  cartOverlay.classList.add('active');
-});
-mobileCartIcon.addEventListener('click', () => {
-  cartSidebar.classList.add('open');
-  cartOverlay.classList.add('active');
-});
+// cartIcon.addEventListener('click', () => {
+//   cartSidebar.classList.add('open');
+//   cartOverlay.classList.add('active');
+// });
+// mobileCartIcon.addEventListener('click', () => {
+//   cartSidebar.classList.add('open');
+//   cartOverlay.classList.add('active');
+// });
 
-closeCart.addEventListener('click', () => {
-  cartSidebar.classList.remove('open');
-  cartOverlay.classList.remove('active');
-});
+// closeCart.addEventListener('click', () => {
+//   cartSidebar.classList.remove('open');
+//   cartOverlay.classList.remove('active');
+// });
 
-cartOverlay.addEventListener('click', () => {
-  cartSidebar.classList.remove('open');
-  cartOverlay.classList.remove('active');
-});
+// cartOverlay.addEventListener('click', () => {
+//   cartSidebar.classList.remove('open');
+//   cartOverlay.classList.remove('active');
+// });
 
 function addToCart(button) {
   const card = button.closest('.book-card');
@@ -157,3 +157,58 @@ function loadcart() {
 }
 
 loadcart();
+
+// ===============================login/signup start=========================
+
+document.addEventListener('DOMContentLoaded', function() {
+    checkAuthStatus();
+});
+
+// Check if user is logged in
+async function checkAuthStatus() {
+    try {
+        const response = await fetch('/api/auth/check');
+        const data = await response.json();
+        
+        if (data.authenticated) {
+            showUserProfile(data.user);
+        } else {
+            showGuestButtons();
+        }
+    } catch (error) {
+        console.error('Error checking auth status:', error);
+        showGuestButtons();
+    }
+}
+
+function showUserProfile(user) {
+    document.getElementById('login-btn').style.display = 'none';
+    document.getElementById('profile-dropdown').style.display = 'block';
+}
+
+function showGuestButtons() {
+    document.getElementById('login-btn').style.display = 'flex';
+    document.getElementById('profile-dropdown').style.display = 'none';
+}
+
+
+// Logout function
+async function logout() {
+    try {
+        const response = await fetch('/api/auth/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (response.ok) {
+            window.location.href = '/login';
+        } else {
+            alert('Logout failed. Please try again.');
+        }
+    } catch (error) {
+        console.error('Logout error:', error);
+        alert('An error occurred during logout.');
+    }
+}

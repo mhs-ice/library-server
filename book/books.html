@@ -10,14 +10,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
   <link rel="stylesheet" href="books.css" />
-  <!-- <link rel="stylesheet" href="common.css"> -->
-  <!-- <link rel="stylesheet" href="/css/responsive.css"> -->
+  <link rel="stylesheet" href="common.css">
+  <link rel="stylesheet" href="/css/responsive.css">
 
 </head>
 
 <body>
   <!-- ========================NavBar Start=========================== -->
-<!-- 
+
   <div class="navbar-container">
     <div class="logo">
       <img src="/assets/Seminar Library Logo (Without BG).png" srcset="">
@@ -28,7 +28,7 @@
         <li>
           <div class="search-container">
             <input type="text" class="search-input" placeholder="Search...">
-            <i class="fa fa-search search-icon"></i>
+            <i class="fa fa-search nav-search-icon"></i>
           </div>
         </li>
         <li><a href="/">Home</a></li>
@@ -49,7 +49,7 @@
     <div class="mobile-menu-btn-container">
       <div class="search-container">
         <input type="text" class="mobile-search-input" placeholder="Search Books...">
-        <i class="fa fa-search search-icon" onclick="openSearch()" id="search-icon" style="font-size: 20px; ">
+        <i class="fa fa-search nav-search-icon" onclick="openSearch()" id="search-icon" style="font-size: 20px; ">
         </i>
       </div>
       <button class="mobile-cart-icon" id="mobile-cart-icon" onclick="window.location.href='/checkout'">
@@ -61,7 +61,7 @@
       </button>
     </div>
     <div class="overlay" id="overlay"></div>
-    <div id="sidebar" class="sidebar">
+    <div id="nav-sidebar" class="nav-sidebar">
       <button class="close-btn" onclick="closeNav()">&times;</button>
       <div class="sidebar-content">
         <div class="user-profile">
@@ -80,10 +80,10 @@
         <button class="mobile-logout-btn"><span><i class="fas fa-sign-out-alt"></i></span>&nbsp;Log Out</button>
       </div>
     </div>
-  </div> -->
+  </div>
 
   <!-- =============== Cart Start ================ -->
-  <!-- <div class="cartOverlay" id="cartOverlay"></div>
+  <div class="cartOverlay" id="cartOverlay"></div>
     <div class="cart-sidebar" id="cart-sidebar">
         <div class="header">
             <img src="/assets/Your Cart.png" width="50px" alt="" srcset="">
@@ -112,7 +112,7 @@
             </div>
             <button class="proceed-btn" onclick="window.location.href='/checkout/checkout.html'">Proceed to Checkout</button>
         </div>
-    </div> -->
+    </div>
   <!-- ===============Navbar End====================== -->
   <header class="header">
     <h1>📚 Browse Books</h1>
@@ -219,8 +219,8 @@
           card.className = 'book-card';
           card.setAttribute('data-category', book.category);
           card.innerHTML = `
-            <img src="public/images/${book.coverImage}" alt="Book Cover"
-            onerror="this.src='public/images/default.jpg'">
+            <img src="/images/${book.coverImage}" alt="Book Cover"
+            onerror="this.src='/images/default.jpg'">
             <div class="info">
               <h4>${book.title}</h4>
               <p>${book.author}</p>
@@ -228,7 +228,7 @@
                 <span class="badge ${book.available ? 'available' : 'unavailable'}">
                   ${book.available ? 'Available' : 'Unavailable'}
                 </span>
-                ${book.available ? `<button class="borrow-btn">Borrow</button>` : ''}
+                ${book.available ? `<button class="borrow-btn" onclick="addToCart(this)">Borrow</button>` : ''}
               </div>
               <div class="actions">
                 ${book.available ? `
@@ -314,7 +314,7 @@
   </script>
 
   <!-- ========Footer Start ================= -->
-  <!-- <footer class="footer">
+  <footer class="footer">
     <div class="footer-container">
 
       <div class="footer-section">
@@ -358,9 +358,9 @@
     <div class="footer-bottom">
       <p>© 2025 ICE Seminar Library, RU. Designed by Mehedi.</p>
     </div>
-  </footer> -->
+  </footer>
   <!-- =========Footer End============== -->
-  <!-- <script src="common.js"></script> -->
+  <script src="common.js"></script>
   <!-- <script src="books.js"></script> -->
 </body>
 
