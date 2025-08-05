@@ -357,7 +357,7 @@ app.post('/api/forgot-password', async (req, res) => {
       subject: 'Password Reset Request',
       html: `
                 <h2>Password Reset Request</h2>
-                <p>Hello beautiful people,</p>
+                <p>Hello Beautiful People,</p>
                 <p>You requested a password reset. Click the link below to reset your password:</p>
                 <a href="${resetUrl}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">Reset Password</a>
                 <p>Or copy and paste this link: ${resetUrl}</p>
