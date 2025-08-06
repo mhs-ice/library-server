@@ -6,8 +6,7 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const session = require('express-session');
 const bcrypt = require('bcrypt');
-const RedisStore = require("connect-redis").default;
-const { createClient } = require("redis");
+
 
 const app = express();
 
@@ -17,25 +16,42 @@ require('dotenv').config();
 
 
 
+const { createClient } = require('redis');
+let RedisStore = require('connect-redis').default; // Critical change
+
 // Initialize Redis client
 const redisClient = createClient({
-  url: process.env.REDIS_URL // Auto-injected by Railway
-});
-redisClient.connect().catch(console.error);
-
-// Configure sessions
-app.use(session({
-  store: new RedisStore({ client: redisClient }),
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: process.env.NODE_ENV === "production",
-    httpOnly: true,
-    sameSite: "lax",
-    maxAge: 86400000 // 24 hours
+  url: process.env.REDIS_URL,
+  socket: {
+    connectTimeout: 5000,
+    reconnectStrategy: (retries) => Math.min(retries * 100, 5000)
   }
-}));
+});
+
+// Async connection handler
+(async () => {
+  try {
+    await redisClient.connect();
+    console.log('Redis connected successfully');
+    
+    app.use(session({
+      store: new RedisStore({ client: redisClient }), // Now correct
+      secret: process.env.SESSION_SECRET,
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        secure: process.env.NODE_ENV === "production",
+        httpOnly: true,
+        sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
+        maxAge: 86400000
+      }
+    }));
+    
+  } catch (err) {
+    console.error('Redis connection failed:', err);
+    process.exit(1);
+  }
+})();
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/about', express.static(path.join(__dirname, 'about')));
