@@ -11,7 +11,10 @@ const { RedisStore } = require('connect-redis');
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: [process.env.FRONTEND_URL, 'http://localhost:3000'],
+  credentials: true
+}));
 app.use(express.json());
 require('dotenv').config();
 
@@ -52,28 +55,6 @@ let redisClient;
         maxAge: 86400000
       }
     }));
-    // ================== MIDDLEWARE DEFINITIONS ==================
-    function checkAuthStatus(req, res, next) {
-      // 1. Verify session middleware is loaded
-      if (!req.session) {
-        return res.status(500).json({ error: 'Authentication system not ready' });
-      }
-
-      // 2. Check authentication
-      if (!req.session.userId) {
-        // Track where user came from for redirect back
-        const returnTo = req.originalUrl;
-        return res.redirect(`/login?returnTo=${encodeURIComponent(returnTo)}`);
-      }
-
-      // 3. Add user data to response locals
-      res.locals.user = {
-        id: req.session.userId,
-        email: req.session.email
-      };
-
-      next();
-    }
 
     console.log('Redis session store configured');
 
@@ -158,10 +139,6 @@ let redisClient;
 
     app.get('/reset-password', (req, res) => {
       res.sendFile(path.join(__dirname, 'authentication', 'forgot-pass', 'reset-password.html'));
-    });
-
-    app.get('/checkout', checkAuthStatus, (req, res) => {
-      res.sendFile(path.join(__dirname, 'checkout', 'checkout.html'));
     });
 
     app.get('/health', (req, res) => res.sendStatus(200));
@@ -313,13 +290,21 @@ let redisClient;
         req.session.username = user.first_name;
         req.session.email = user.email;
 
-        res.json({
-          message: 'Login successful',
-          user: {
-            id: user.student_id,
-            username: user.first_name,
-            email: user.email
+        // Explicitly save session
+        req.session.save(err => {
+          if (err) {
+            console.error('Session save error:', err);
+            return res.status(500).json({ message: 'Login failed' });
           }
+
+          res.json({
+            message: 'Login successful',
+            user: {
+              id: user.student_id,
+              username: user.first_name,
+              email: user.email
+            }
+          });
         });
       } catch (error) {
         console.error('Login error:', error);

@@ -349,6 +349,7 @@
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
+                                credentials: 'include'
                             },
                             body: JSON.stringify({ student_id, first_name, last_name, email, phone, department, year, address, pass})
                         });
