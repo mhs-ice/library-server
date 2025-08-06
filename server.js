@@ -6,7 +6,8 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const session = require('express-session');
 const bcrypt = require('bcrypt');
-
+const { createClient } = require('redis');
+const { RedisStore } = require('connect-redis'); // <-- Correct import for v9
 
 const app = express();
 
@@ -14,17 +15,12 @@ app.use(cors());
 app.use(express.json());
 require('dotenv').config();
 
-
-const { createClient } = require('redis');
-const { promisify } = require('util');
-
-// New Redis Store initialization pattern
+// Redis initialization
 let redisClient;
-let RedisStore;
 
 (async () => {
   try {
-    // 1. First create Redis client
+    // 1. Create Redis client
     redisClient = createClient({
       url: process.env.REDIS_URL,
       socket: {
@@ -39,13 +35,13 @@ let RedisStore;
     // 3. Connect to Redis
     await redisClient.connect();
     console.log('Redis connected successfully');
-
-    // 4. Now require RedisStore AFTER connection
-    RedisStore = require('connect-redis')(session);
     
-    // 5. Configure session middleware
+    // 4. Configure session middleware with new syntax
     app.use(session({
-      store: new RedisStore({ client: redisClient }),
+      store: new RedisStore({ 
+        client: redisClient,
+        prefix: "myapp:" // optional
+      }),
       secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
@@ -58,7 +54,13 @@ let RedisStore;
     }));
 
     console.log('Redis session store configured');
-    
+
+    // Start your server here, after Redis and session are ready
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+
   } catch (err) {
     console.error('Redis initialization failed:', err);
     process.exit(1);
