@@ -16,6 +16,7 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
+app.set('trust proxy', 1); // Trust Railway's proxy
 require('dotenv').config();
 
 // Redis and Session Initialization
@@ -51,8 +52,9 @@ let redisClient;
       cookie: {
         secure: process.env.NODE_ENV === "production",
         httpOnly: true,
-        sameSite: process.env.NODE_ENV === "production" ? 'none' : 'lax',
-        maxAge: 86400000
+        sameSite:'none',
+        maxAge: 86400000,
+        domain: process.env.NODE_ENV === "production" ? '.railway.app' : undefined
       }
     }));
 
@@ -152,13 +154,13 @@ let redisClient;
     }
 
     // Protected Routes
-    app.get('/checkout', requireAuth, (req, res) => {
+    app.get('/checkout',  requireAuth, (req, res) => {
       res.sendFile(path.join(__dirname, 'checkout', 'checkout.html'));
     });
 
-    app.get('/profile', requireAuth, (req, res) => {
-      res.sendFile(path.join(__dirname, 'profile', 'profile.html'));
-    });
+    // app.get('/profile', requireAuth, (req, res) => {
+    //   res.sendFile(path.join(__dirname, 'profile', 'profile.html'));
+    // });
 
     // Database Operations
     app.post('/borrow-checkout', async (req, res) => {
