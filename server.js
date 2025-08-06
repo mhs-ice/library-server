@@ -31,14 +31,14 @@ let redisClient;
 
     // 2. Add error handling
     redisClient.on('error', err => console.error('Redis Client Error:', err));
-    
+
     // 3. Connect to Redis
     await redisClient.connect();
     console.log('Redis connected successfully');
-    
+
     // 4. Configure session middleware FIRST
     app.use(session({
-      store: new RedisStore({ 
+      store: new RedisStore({
         client: redisClient,
         prefix: "myapp:"
       }),
@@ -52,6 +52,28 @@ let redisClient;
         maxAge: 86400000
       }
     }));
+    // ================== MIDDLEWARE DEFINITIONS ==================
+    function checkAuthStatus(req, res, next) {
+      // 1. Verify session middleware is loaded
+      if (!req.session) {
+        return res.status(500).json({ error: 'Authentication system not ready' });
+      }
+
+      // 2. Check authentication
+      if (!req.session.userId) {
+        // Track where user came from for redirect back
+        const returnTo = req.originalUrl;
+        return res.redirect(`/login?returnTo=${encodeURIComponent(returnTo)}`);
+      }
+
+      // 3. Add user data to response locals
+      res.locals.user = {
+        id: req.session.userId,
+        email: req.session.email
+      };
+
+      next();
+    }
 
     console.log('Redis session store configured');
 
