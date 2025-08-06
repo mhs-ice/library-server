@@ -12,7 +12,10 @@ document.addEventListener('DOMContentLoaded', function() {
     profileDropdown.classList.remove('active');
   });
 });
-
+document.addEventListener('contextmenu', (e) => e.preventDefault());
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.shiftKey && e.key === 'I') e.preventDefault();
+});
 // ==================== Sidebar Start ======================
 const overlay = document.getElementById("overlay");
 function openNav() {

@@ -58,7 +58,10 @@ document.addEventListener('click', function (event) {
     searchInput.classList.remove('active');
   }
 });
-
+document.addEventListener('contextmenu', (e) => e.preventDefault());
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.shiftKey && e.key === 'I') e.preventDefault();
+});
 // ==============Cart Functionality===========
 let cart = [];
 const cartIcon = document.getElementById('cart-icon');

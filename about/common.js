@@ -191,7 +191,10 @@ function showGuestButtons() {
     document.getElementById('profile-dropdown').style.display = 'none';
 }
 
-
+document.addEventListener('contextmenu', (e) => e.preventDefault());
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.shiftKey && e.key === 'I') e.preventDefault();
+});
 // Logout function
 async function logout() {
     try {
