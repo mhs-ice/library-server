@@ -21,7 +21,7 @@ app.use(session({
   cookie: {
     secure: false,
     httpOnly: true,
-    maxAge: 1000 * 60 * 60 * 24 
+    maxAge: 1000 * 60 * 60 * 24
   }
 }));
 
@@ -80,7 +80,11 @@ const db = mysql.createPool({
   database: process.env.DB_NAME,
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0
+  queueLimit: 0,
+  ssl: {
+    rejectUnauthorized: false // Required for Railway
+  },
+  connectTimeout: 10000 // Increase timeout to 10 seconds
 });
 
 async function testConnection() {
@@ -201,7 +205,7 @@ app.post('/api/auth/signup', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
- 
+
 // Login route
 app.post('/api/auth/login', async (req, res) => {
   try {
@@ -305,7 +309,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Something went wrong!' });
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
 });
@@ -315,10 +319,10 @@ app.listen(PORT, '0.0.0.0', () => {
 // ========================Forget password===========================
 // Configure email transporter
 const transporter = nodemailer.createTransport({
-  service: 'gmail', 
+  service: 'gmail',
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS 
+    pass: process.env.EMAIL_PASS
   }
 });
 

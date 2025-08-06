@@ -183,11 +183,11 @@ async function checkAuthStatus() {
 
 function showUserProfile(user) {
     document.getElementById('login-btn').style.display = 'none';
-    document.getElementById('profile-dropdown').style.display = 'block';
+    document.getElementById('profile-dropdown').style.display = 'inline-block';
 }
 
 function showGuestButtons() {
-    document.getElementById('login-btn').style.display = 'flex';
+    document.getElementById('login-btn').style.display = 'block';
     document.getElementById('profile-dropdown').style.display = 'none';
 }
 
