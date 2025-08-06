@@ -1,14 +1,19 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('contextmenu', (e) => e.preventDefault());
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.shiftKey && e.key === 'I') e.preventDefault();
+});
+
+document.addEventListener('DOMContentLoaded', function () {
   const profileDropdown = document.querySelector('.profile-dropdown');
   const profileIcon = document.querySelector('.profile-icon');
-  
-  profileIcon.addEventListener('click', function(e) {
+
+  profileIcon.addEventListener('click', function (e) {
     e.stopPropagation();
     profileDropdown.classList.toggle('active');
   });
-  
+
   // Close dropdown when clicking outside
-  document.addEventListener('click', function() {
+  document.addEventListener('click', function () {
     profileDropdown.classList.remove('active');
   });
 });
@@ -42,7 +47,7 @@ const searchIcon = document.getElementById('search-icon');
 const searchInput = document.querySelector('.mobile-search-input');
 
 searchIcon.addEventListener('click', function (event) {
-  event.stopPropagation(); 
+  event.stopPropagation();
   searchInput.classList.toggle('active');
 
   if (searchInput.classList.contains('active')) {
