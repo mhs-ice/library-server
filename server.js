@@ -106,7 +106,8 @@ let redisClient;
 
     // Route Handlers
     app.get('/', (req, res) => {
-      res.sendFile(path.join(__dirname, 'index.html'));
+      // res.sendFile(path.join(__dirname, 'index.html'));
+      res.send("Hello from Railway")
     });
 
     app.get('/about', (req, res) => {
@@ -428,7 +429,7 @@ let redisClient;
       res.status(500).json({ error: 'Something went wrong!' });
     });
 
-    const PORT = process.env.PORT || 36628;
+    const PORT = process.env.PORT || 3000;
     app.listen(PORT, '0.0.0.0', () => {
       console.log(`Server running on Railway at port ${PORT}`);
     });
