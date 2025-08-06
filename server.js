@@ -6,6 +6,8 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const session = require('express-session');
 const bcrypt = require('bcrypt');
+const RedisStore = require("connect-redis").default;
+const { createClient } = require("redis");
 
 const app = express();
 
@@ -14,15 +16,24 @@ app.use(express.json());
 require('dotenv').config();
 
 
+
+// Initialize Redis client
+const redisClient = createClient({
+  url: process.env.REDIS_URL // Auto-injected by Railway
+});
+redisClient.connect().catch(console.error);
+
+// Configure sessions
 app.use(session({
+  store: new RedisStore({ client: redisClient }),
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
     secure: process.env.NODE_ENV === "production",
     httpOnly: true,
-    sameSite: 'lax',
-    maxAge: 1000 * 60 * 60 * 24
+    sameSite: "lax",
+    maxAge: 86400000 // 24 hours
   }
 }));
 
