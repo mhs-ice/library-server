@@ -138,7 +138,7 @@ let redisClient;
       res.sendFile(path.join(__dirname, 'authentication', 'forgot-pass', 'reset-password.html'));
     });
 
-    app.get('/checkout', (req, res) => {
+    app.get('/checkout', checkAuthStatus, (req, res) => {
       res.sendFile(path.join(__dirname, 'checkout', 'checkout.html'));
     });
 
