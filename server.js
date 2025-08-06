@@ -19,8 +19,9 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false,
+    secure: process.env.NODE_ENV === "production",
     httpOnly: true,
+    sameSite: 'lax',
     maxAge: 1000 * 60 * 60 * 24
   }
 }));
@@ -72,6 +73,8 @@ app.get('/checkout', requireAuth, (req, res) => {
 app.get('/profile', (req, res) => {
   res.sendFile(path.join(__dirname, 'profile', 'profile.html'));
 });
+
+app.get('/health', (req, res) => res.sendStatus(200));
 
 const db = mysql.createPool({
   host: process.env.DB_HOST,       // caboose.proxy.rlwy.net
@@ -314,9 +317,9 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Something went wrong!' });
 });
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 36628;
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on Railway at port ${PORT}`);
 });
 
 
