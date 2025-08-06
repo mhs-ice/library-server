@@ -74,17 +74,22 @@ app.get('/profile', (req, res) => {
 });
 
 const db = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  host: process.env.DB_HOST,       // caboose.proxy.rlwy.net
+  user: process.env.DB_USER,       // root
+  password: process.env.DB_PASSWORD, 
+  database: process.env.DB_NAME,   // railway
+  port: process.env.DB_PORT || 36628, // Explicit port declaration
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
   ssl: {
-    rejectUnauthorized: false // Required for Railway
+    rejectUnauthorized: false
   },
-  connectTimeout: 10000 // Increase timeout to 10 seconds
+  connectTimeout: 30000,          // Increased to 30 seconds
+  enableKeepAlive: true,          // Prevents connection stalls
+  keepAliveInitialDelay: 10000,   // Initial keepalive delay
+  timezone: 'Z',                  // UTC timezone
+  charset: 'utf8mb4_unicode_ci'   // Recommended charset
 });
 
 async function testConnection() {
