@@ -106,7 +106,7 @@ let redisClient;
     app.use('/book', express.static(path.join(__dirname, 'book')));
     app.use('/donate', express.static(path.join(__dirname, 'donate')));
     app.use('/authentication', express.static(path.join(__dirname, 'authentication')));
-    // app.use('/checkout', express.static(path.join(__dirname, 'checkout')));
+    app.use('/checkout', express.static(path.join(__dirname, 'checkout')));
     app.use('/profile', express.static(path.join(__dirname, 'profile')));
 
     // Route Handlers
