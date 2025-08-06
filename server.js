@@ -138,6 +138,10 @@ let redisClient;
       res.sendFile(path.join(__dirname, 'authentication', 'forgot-pass', 'reset-password.html'));
     });
 
+    app.get('/checkout', (req, res) => {
+      res.sendFile(path.join(__dirname, 'checkout', 'checkout.html'));
+    });
+
     app.get('/health', (req, res) => res.sendStatus(200));
 
     // Authentication Middleware
