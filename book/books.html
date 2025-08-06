@@ -223,7 +223,8 @@
             onerror="this.src='/images/default.jpg'">
             <div class="info">
               <h4>${book.title}</h4>
-              <p>${book.author}</p>
+              <p >${book.author}</p>
+              <p style="font-size:8px; margin-top:10px">There is some misfunctionality in btns😐, will be fixed later</p>
               <div class="status-row">
                 <span class="badge ${book.available ? 'available' : 'unavailable'}">
                   ${book.available ? 'Available' : 'Unavailable'}
@@ -232,8 +233,8 @@
               </div>
               <div class="actions">
                 ${book.available ? `
-                  <a href="public/books/${book.readPath}" class="btn" target="_blank">Read</a>
-                  <a href="public/books/${book.downloadPath}" class="btn" download>Download</a>` : ''}
+                  <a href="books/${book.readPath}" class="btn" target="_blank">Read</a>
+                  <a href="books/${book.downloadPath}" class="btn" download>Download</a>` : ''}
               </div>
             </div>`;
           bookGrid.appendChild(card);
