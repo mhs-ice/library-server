@@ -15,27 +15,37 @@ app.use(express.json());
 require('dotenv').config();
 
 
-
 const { createClient } = require('redis');
-let RedisStore = require('connect-redis').default; // Critical change
+const { promisify } = require('util');
 
-// Initialize Redis client
-const redisClient = createClient({
-  url: process.env.REDIS_URL,
-  socket: {
-    connectTimeout: 5000,
-    reconnectStrategy: (retries) => Math.min(retries * 100, 5000)
-  }
-});
+// New Redis Store initialization pattern
+let redisClient;
+let RedisStore;
 
-// Async connection handler
 (async () => {
   try {
+    // 1. First create Redis client
+    redisClient = createClient({
+      url: process.env.REDIS_URL,
+      socket: {
+        connectTimeout: 10000,
+        reconnectStrategy: (retries) => Math.min(retries * 100, 5000)
+      }
+    });
+
+    // 2. Add error handling
+    redisClient.on('error', err => console.error('Redis Client Error:', err));
+    
+    // 3. Connect to Redis
     await redisClient.connect();
     console.log('Redis connected successfully');
+
+    // 4. Now require RedisStore AFTER connection
+    RedisStore = require('connect-redis')(session);
     
+    // 5. Configure session middleware
     app.use(session({
-      store: new RedisStore({ client: redisClient }), // Now correct
+      store: new RedisStore({ client: redisClient }),
       secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
@@ -46,9 +56,11 @@ const redisClient = createClient({
         maxAge: 86400000
       }
     }));
+
+    console.log('Redis session store configured');
     
   } catch (err) {
-    console.error('Redis connection failed:', err);
+    console.error('Redis initialization failed:', err);
     process.exit(1);
   }
 })();
