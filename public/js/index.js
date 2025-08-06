@@ -1,7 +1,7 @@
-// document.addEventListener('contextmenu', (e) => e.preventDefault());
-// document.addEventListener('keydown', (e) => {
-//   if (e.ctrlKey && e.shiftKey && e.key === 'I') e.preventDefault();
-// });
+document.addEventListener('contextmenu', (e) => e.preventDefault());
+document.addEventListener('keydown', (e) => {
+  if (e.ctrlKey && e.shiftKey && e.key === 'I') e.preventDefault();
+});
 
 document.addEventListener('DOMContentLoaded', function() {
   const profileDropdown = document.querySelector('.profile-dropdown');
